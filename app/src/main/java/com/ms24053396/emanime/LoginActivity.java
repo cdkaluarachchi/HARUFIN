@@ -1,6 +1,7 @@
 package com.ms24053396.emanime;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -46,39 +47,50 @@ public class LoginActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString();
                 FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-                firestore.collection("users")
-                        .document(username)
-                        .get()
-                        .addOnSuccessListener(document -> {
-                            if (document.exists()) {
-                                String DBusername = document.getString("username");
-                                String DBhashedPassword = document.getString("password");
-                                String localHash = hashPassword(password);
-                                // !username.isEmpty() && !password.isEmpty()
-                                if (Objects.equals(DBhashedPassword, localHash)) {
-                                    // Handle successful login (You can add more complex authentication logic here)
+                if(!username.isEmpty() && !password.isEmpty()){
+                    firestore.collection("users")
+                            .document(username)
+                            .get()
+                            .addOnSuccessListener(document -> {
+                                if (document.exists()) {
 
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish(); // Close the LoginActivity
+                                    String DBusername = document.getString("username");
+                                    String DBhashedPassword = document.getString("password");
+                                    System.out.println(document);
+                                    String localHash = hashPassword(password);
+                                    // !username.isEmpty() && !password.isEmpty()
+                                    if (Objects.equals(DBhashedPassword, localHash)) {
+                                        // Handle successful login (You can add more complex authentication logic here)
+                                        SharedPreferences sharedPreferences = getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString("username", username);
+                                        editor.apply();
+
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish(); // Close the LoginActivity
+                                    } else {
+                                        // Show error message if fields are empty
+                                        Toast.makeText(LoginActivity.this, "Please check Credentials", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    // Handle the retrieved username and hashed password
+                                    // For example, display them in a TextView or use them for authentication
+                                    //Log.d("Firestore", "Username: " + DBusername + ", Hashed Password: " + hashedPassword);
                                 } else {
-                                    // Show error message if fields are empty
-                                    Toast.makeText(LoginActivity.this, "Please check Credentials", Toast.LENGTH_SHORT).show();
+                                    //Log.d("Firestore", "No such document");
+                                    Toast.makeText(LoginActivity.this, "No such user found", Toast.LENGTH_SHORT).show();
                                 }
-
-                                // Handle the retrieved username and hashed password
-                                // For example, display them in a TextView or use them for authentication
-                                //Log.d("Firestore", "Username: " + DBusername + ", Hashed Password: " + hashedPassword);
-                            } else {
-                                //Log.d("Firestore", "No such document");
-                                Toast.makeText(LoginActivity.this, "No such user found", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(e -> {
-                            //Log.w("Firestore", "Error reading document: ", e);
-                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                            })
+                            .addOnFailureListener(e -> {
+                                //Log.w("Firestore", "Error reading document: ", e);
+                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }else {
+                    Toast.makeText(LoginActivity.this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
 
         MaterialButton buttonRegisterLink = findViewById(R.id.buttonRegisterLink);

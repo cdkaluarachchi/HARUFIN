@@ -117,12 +117,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Store the username and hashed password in Firebase Realtime Database
     private void registerUser(String username, String hashedPassword) {
-        HashMap<String, String> userMap = new HashMap<>();
-        userMap.put("username", username);
-        userMap.put("password", hashedPassword);
+        //HashMap<String, String> userMap = new HashMap<>();
+        //userMap.put("username", username);
+        //userMap.put("password", hashedPassword);
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(hashedPassword);
         // Push the data to the database under a unique key
         try{
-            firestore.collection("users").document(username).set(userMap)
+            firestore.collection("users").document(username).set(user)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();

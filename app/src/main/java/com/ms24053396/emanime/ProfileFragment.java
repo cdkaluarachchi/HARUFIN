@@ -1,5 +1,8 @@
 package com.ms24053396.emanime;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +28,7 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String username;
     private String mParam2;
 
     public ProfileFragment() {
@@ -49,8 +56,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -59,6 +67,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        TextView textViewUsername = (TextView) view.findViewById(R.id.usernameTextView);
+
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+        username = sharedPreferences.getString("username", null);
+        System.out.println(username);
+        textViewUsername.setText(username);
+       // return inflater.inflate(R.layout.fragment_profile, container, false);
+        return view;
     }
+
+
 }

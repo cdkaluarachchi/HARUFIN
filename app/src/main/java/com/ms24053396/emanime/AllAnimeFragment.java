@@ -1,12 +1,24 @@
 package com.ms24053396.emanime;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +35,11 @@ public class AllAnimeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView recyclerView;
+    private AnimeAdapter adapter;
+    private List<Anime> animeList = new ArrayList<>();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public AllAnimeFragment() {
         // Required empty public constructor
@@ -59,6 +76,36 @@ public class AllAnimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_anime, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_anime, container, false);
+        recyclerView = view.findViewById(R.id.recyclerViewAnime);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new AnimeAdapter(animeList);
+        recyclerView.setAdapter(adapter);
+
+        loadAnimeFromFirestore();
+
+        return view;
+        //return inflater.inflate(R.layout.fragment_all_anime, container, false);
+    }
+
+    private void loadAnimeFromFirestore() {
+        CollectionReference animeRef = db.collection("anime");
+
+        animeRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Toast.makeText(getActivity(), "Error fetching data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                animeList.clear();
+                for (QueryDocumentSnapshot doc : value) {
+                    Anime anime = doc.toObject(Anime.class);
+                    animeList.add(anime);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }
