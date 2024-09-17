@@ -32,6 +32,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextUsername"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
@@ -47,6 +48,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -58,7 +60,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonLogin"
-        style="@style/Widget.Material3.Button"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="134dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
@@ -71,6 +73,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonRegisterLink"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="135dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"

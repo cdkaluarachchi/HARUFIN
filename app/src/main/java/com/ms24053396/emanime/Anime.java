@@ -2,12 +2,42 @@ package com.ms24053396.emanime;
 
 import java.util.List;
 
+class Episode {
+    String episodeName;
+    String episodeNumber;
+    String episodeURL;
+
+    public String getEpisodeURL() {
+        return episodeURL;
+    }
+
+    public void setEpisodeURL(String episodeURL) {
+        this.episodeURL = episodeURL;
+    }
+
+    public String getEpisodeNumber() {
+        return episodeNumber;
+    }
+
+    public void setEpisodeNumber(String episodeNumber) {
+        this.episodeNumber = episodeNumber;
+    }
+
+    public String getEpisodeName() {
+        return episodeName;
+    }
+
+    public void setEpisodeName(String episodeName) {
+        this.episodeName = episodeName;
+    }
+}
+
 public class Anime {
 
     String animeID;
     String name;
     Integer episodeCount = 0;
-    List<String> episodes;
+    List<Episode> episodes;
     Float rating;
 
     public String getAnimeID() {
@@ -34,11 +64,11 @@ public class Anime {
         this.episodeCount = episodeCount;
     }
 
-    public List<String> getEpisodes() {
+    public List<Episode> getEpisodes() {
         return episodes;
     }
 
-    public void setEpisodes(List<String> episodes) {
+    public void setEpisodes(List<Episode> episodes) {
         this.episodes = episodes;
     }
 

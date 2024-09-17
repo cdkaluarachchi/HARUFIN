@@ -40,6 +40,23 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         Button buttonLogin = findViewById(R.id.buttonLogin);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        // to skip login if alread logged in
+        if (sharedPreferences.contains("isLoggedIn") && (sharedPreferences.contains("type"))) {
+            String isLoggedIn = sharedPreferences.getString("isLoggedIn", null);
+            if (isLoggedIn.equals(String.valueOf(true))){
+                String type = sharedPreferences.getString("type", null);
+                if (type.equals("standard")){
+                    Intent intent = new Intent(LoginActivity.this, MainActivityStandard.class);
+                    startActivity(intent);
+                } else if(type.equals("admin")){
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,21 +70,28 @@ public class LoginActivity extends AppCompatActivity {
                             .get()
                             .addOnSuccessListener(document -> {
                                 if (document.exists()) {
-
                                     String DBusername = document.getString("username");
                                     String DBhashedPassword = document.getString("password");
-                                    System.out.println(document);
+                                    String userType = document.getString("type");
+
                                     String localHash = hashPassword(password);
                                     // !username.isEmpty() && !password.isEmpty()
                                     if (Objects.equals(DBhashedPassword, localHash)) {
                                         // Handle successful login (You can add more complex authentication logic here)
-                                        SharedPreferences sharedPreferences = getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
                                         editor.putString("username", username);
+                                        editor.putString("type", userType);
+                                        editor.putString("isLoggedIn", String.valueOf(true));
                                         editor.apply();
 
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                        if (userType.equals("standard")){
+                                            Intent intent = new Intent(LoginActivity.this, MainActivityStandard.class);
+                                            startActivity(intent);
+                                        } else if(userType.equals("admin")){
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+
                                         finish(); // Close the LoginActivity
                                     } else {
                                         // Show error message if fields are empty

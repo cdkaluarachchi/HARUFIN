@@ -2,15 +2,15 @@ package com.ms24053396.emanime;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static androidx.core.app.ActivityCompat.finishAffinity;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Objects;
@@ -74,6 +74,18 @@ public class ProfileFragment extends Fragment {
         username = sharedPreferences.getString("username", null);
         System.out.println(username);
         textViewUsername.setText(username);
+
+        Button logoutButton = (android.widget.Button) view.findViewById(R.id.logoutProfileButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                requireActivity().finishAffinity();
+            }
+        });
        // return inflater.inflate(R.layout.fragment_profile, container, false);
         return view;
     }

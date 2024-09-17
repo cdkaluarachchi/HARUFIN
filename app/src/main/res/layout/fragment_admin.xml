@@ -34,6 +34,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextAnimeID"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -48,6 +49,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextName"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -62,6 +64,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextEpisodeCount"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -70,6 +73,7 @@
             <!-- Button to submit anime info -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/adminSubmitButton"
+                style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="Submit" />

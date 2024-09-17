@@ -34,6 +34,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextUsername"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text" />
@@ -49,6 +50,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -58,12 +60,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginTop="16dp"
             android:hint="Re-Enter Password"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRePassword"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
@@ -75,7 +79,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonRegister"
-        style="@style/Widget.Material3.Button"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="134dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
