@@ -88,7 +88,7 @@
                 app:icon="@drawable/ic_add_24px" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/deleteButton"
                 style="@style/Widget.Material3.Button.IconButton.Outlined"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package com.ms24053396.emanime;
 
+import java.util.Base64;
 import java.util.List;
 
 class Episode {
@@ -39,6 +40,7 @@ public class Anime {
     Integer episodeCount = 0;
     List<Episode> episodes;
     Float rating;
+    String imageUrl;
 
     public String getAnimeID() {
         return animeID;
@@ -78,5 +80,13 @@ public class Anime {
 
     public void setRating(Float rating) {
         this.rating = rating;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String image) {
+        this.imageUrl = image;
     }
 }

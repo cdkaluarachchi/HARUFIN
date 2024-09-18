@@ -79,7 +79,7 @@ public class AllAnimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_anime, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewAnime);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AnimeAdapter(animeList);
+        adapter = new AnimeAdapter(requireContext(), animeList);
         recyclerView.setAdapter(adapter);
 
         loadAnimeFromFirestore();

@@ -1,21 +1,32 @@
 package com.ms24053396.emanime;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-
+import android.app.Activity;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import com.google.firebase.appcheck.FirebaseAppCheck;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +47,11 @@ public class AdminFragment extends Fragment {
     private MaterialButton submitButton;
     private TextView animeCountTextView, userCountTextView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private static final int PICK_IMAGE = 1;
+    private ImageView imageViewAnime;
+    public String img;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
     public AdminFragment() {
         // Required empty public constructor
     }
@@ -75,6 +91,10 @@ public class AdminFragment extends Fragment {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_admin, container, false);
         // Bind UI elements
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        //FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        //firebaseAppCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProvider.Factory.getInstance());
         editTextAnimeID = view.findViewById(R.id.editTextAnimeID);
         editTextName = view.findViewById(R.id.editTextName);
         editTextEpisodeCount = view.findViewById(R.id.editTextEpisodeCount);
@@ -83,9 +103,15 @@ public class AdminFragment extends Fragment {
         animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
 
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
-        View imageViewAnime = view.findViewById(R.id.imageViewAdmin);
+        imageViewAnime = view.findViewById(R.id.imageViewAdmin);
         //int animeCount = 0;
-        
+        buttonSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImagePicker();
+                submitButton.setEnabled(false);
+            }
+        });
 
         firestore.collection("users")
                 .get()
@@ -132,6 +158,7 @@ public class AdminFragment extends Fragment {
                     anime.setAnimeID(animeID);
                     anime.setName(name);
                     anime.setEpisodeCount(episodeCount);
+                    anime.setImageUrl(img);
 
                     try{
                         firestore.collection("anime").document(animeID).set(anime)
@@ -142,6 +169,7 @@ public class AdminFragment extends Fragment {
                                         Toast.makeText(getActivity(), "Process failed", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+
                     }catch (Exception e){
 
                     }
@@ -155,6 +183,58 @@ public class AdminFragment extends Fragment {
         return view;
     }
 
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            getActivity();
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Uri selectedImage = data.getData();
+                imageViewAnime.setImageURI(selectedImage);
+                convertImageToBase64(selectedImage);
+            }
+        }
+    }
+
+    private void convertImageToBase64(Uri imageUri) {
+        try {
+            InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            uploadImageToStorage(byteArray);
+            //img = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            //textViewBase64.setText(base64String);
+            //System.out.println(base64String);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void uploadImageToStorage(byte[] imgData) {
+
+        StorageReference imageRef = storageRef.child("images/" + System.currentTimeMillis() + ".png");
+
+        UploadTask uploadTask = imageRef.putBytes(imgData);
+        uploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+            System.out.println("Firebase" + "Upload failed: " + exception.getMessage());
+            submitButton.setEnabled(true);
+        }).addOnSuccessListener(taskSnapshot -> {
+            // Upload success, now get the download URL
+            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                img = uri.toString();
+                submitButton.setEnabled(true);
+            });
+        });
+    }
 //    private void openFileChooser() {
 //        Intent intent = new Intent();
 //        intent.setType("image/*");
