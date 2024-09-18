@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_all_anime"
-        android:icon="@drawable/ic_anime_all"
+        android:icon="@drawable/ic_anime_my"
         android:title="All Anime" />
     <item
         android:id="@+id/nav_my_anime"
-        android:icon="@drawable/ic_anime_my"
+        android:icon="@drawable/ic_anime_all"
         android:title="My Anime" />
     <item
         android:id="@+id/nav_profile"

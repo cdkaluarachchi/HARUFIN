@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,7 +81,12 @@ public class AdminFragment extends Fragment {
         submitButton = view.findViewById(R.id.adminSubmitButton);
         userCountTextView = view.findViewById(R.id.textViewUserCount);
         animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
+
+        Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
+        View imageViewAnime = view.findViewById(R.id.imageViewAdmin);
         //int animeCount = 0;
+        
+
         firestore.collection("users")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -148,4 +154,10 @@ public class AdminFragment extends Fragment {
         });
         return view;
     }
-}
+
+//    private void openFileChooser() {
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }

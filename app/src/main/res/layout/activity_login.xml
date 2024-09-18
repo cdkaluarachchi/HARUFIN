@@ -21,7 +21,7 @@
         app:layout_constraintHorizontal_bias="0.479"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.195">
+        app:layout_constraintVertical_bias="0.333">
 
         <!-- Material 3 TextInputLayout for Username -->
         <com.google.android.material.textfield.TextInputLayout
@@ -59,19 +59,6 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonLogin"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="134dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:text="Login"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.501" />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonRegisterLink"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="135dp"
@@ -81,7 +68,22 @@
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toEndOf="@+id/buttonLogin"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.189" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonLogin"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:text="Login"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.192" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

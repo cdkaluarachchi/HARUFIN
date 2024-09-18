@@ -16,29 +16,55 @@
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="329dp"
-            android:layout_marginBottom="152dp"
+            android:layout_width="379dp"
+            android:layout_height="380dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:context=".ui.admin.AdminFragment"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.164"
+            tools:context=".ui.admin.AdminFragment">
 
-            <!-- TextInput for animeID -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Anime ID">
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="350dp"
+                android:layout_height="65dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextAnimeID"
-
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="181dp"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="Anime ID">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextAnimeID"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="157dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+
+                    android:hint="Episode Count">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextEpisodeCount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+            <!-- TextInput for animeID -->
 
             <!-- TextInput for anime name -->
             <com.google.android.material.textfield.TextInputLayout
@@ -49,26 +75,35 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextName"
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- TextInput for episode count -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Episode Count">
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="350dp"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextEpisodeCount"
-
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonSelectImage"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_marginTop="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="Select Image" />
+
+                <ImageView
+                    android:id="@+id/imageViewAdmin"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginLeft="110dp"
+                    android:scaleType="centerCrop" />
+
+
+            </LinearLayout>
+
 
             <!-- Button to submit anime info -->
             <com.google.android.material.button.MaterialButton
@@ -76,6 +111,7 @@
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
                 android:text="Submit" />
 
         </LinearLayout>
@@ -84,45 +120,50 @@
             android:id="@+id/textViewStaticUserCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="68dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="56dp"
             android:text="User Count"
+            app:layout_constraintEnd_toStartOf="@+id/textViewUserCount"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <TextView
             android:id="@+id/textViewUserCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_marginStart="37dp"
+            android:layout_marginTop="56dp"
             android:text="0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.114"
             app:layout_constraintStart_toEndOf="@+id/textViewStaticUserCount"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="8dp"
             android:text="Anime Count"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewStaticUserCount"
-            app:layout_constraintVertical_bias="0.089" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/textViewAnimeCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="0"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.084"
+            app:layout_constraintHorizontal_bias="0.035"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserCount"
-            app:layout_constraintVertical_bias="0.086" />
+            app:layout_constraintVertical_bias="0.0" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
