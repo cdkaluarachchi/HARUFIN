@@ -50,6 +50,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         this.animeList = animeList;
         this.cacheDir = context.getCacheDir().getAbsolutePath();
         this.firestore = firestore;
+        this.firebaseStorage = FirebaseStorage.getInstance();
         this.context = context;
     }
 
@@ -107,20 +108,25 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         });
 
         holder.deleteButton.setOnClickListener(v -> {
+            int newPosition = holder.getAdapterPosition();
+            String animeid = anime.getImageUrl();
             db.collection("anime") // Replace "anime" with your collection name
                     .document(anime.getAnimeID())
                     .delete()
                     .addOnSuccessListener(aVoid -> {
-                        // Handle success
-                        //Log.d("AnimeAdapter", "Document successfully deleted!");
-                        StorageReference sdb = firebaseStorage.getReferenceFromUrl(anime.getImageUrl());
-                        sdb.delete()
-                                .addOnSuccessListener(aVoid1 -> {
-                                    System.out.println("Image File Deleted");
-                                })
-                                .addOnFailureListener(e -> {
-                                    System.out.println("Error file deletion");
-                                });
+                        if (animeid != null) {
+                            StorageReference sdb = firebaseStorage.getReferenceFromUrl(animeid);
+                            sdb.delete()
+                                    .addOnSuccessListener(aVoid1 -> {
+
+                                        System.out.println("Image File Deleted");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        System.out.println("Error file deletion");
+                                    });
+                        }
+                        //animeList.remove(newPosition);
+                        notifyItemChanged(newPosition);
                         Toast.makeText(context, "Document successfully deleted!", Toast.LENGTH_SHORT).show();
                     })
                     .addOnFailureListener(e -> {

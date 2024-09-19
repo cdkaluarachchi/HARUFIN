@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentReference;
@@ -40,14 +42,13 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
     private List<Anime> animeList;
     private HashMap<String, Bitmap> imageCache = new HashMap<>();
     private String cacheDir;
-    private FirebaseFirestore firestore;
     private FirebaseStorage firebaseStorage;
     private Context context;
 
-    public MyAnimeAdaptor(Context context, List<Anime> animeList) {
+    public MyAnimeAdaptor(Context context,FirebaseStorage storage, List<Anime> animeList) {
         this.animeList = animeList;
         this.cacheDir = context.getCacheDir().getAbsolutePath();
-        this.firestore = firestore;
+        this.firebaseStorage = storage;
         this.context = context;
     }
 
@@ -86,40 +87,49 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
                         holder.animeImage.setImageBitmap(bmp);
                     }
                 } else {
-                    loadImage(holder, imageUrl, imageFile);
+                    //loadImage(holder, imageUrl, imageFile);
                 }
             }
         }
 
         holder.addButton.setOnClickListener(v -> {
-            DocumentReference updateRef = db.collection("users").document(username);
-            String newPref = anime.getAnimeID();
-
-            updateRef.update("anime", FieldValue.arrayUnion(newPref))
-                    .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(context, "Anime successfully added!", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(context, "Error adding added!", Toast.LENGTH_SHORT).show();
-                    });
+            Toast.makeText(context, "Not Implemented", Toast.LENGTH_SHORT).show();
+//            DocumentReference updateRef = db.collection("users").document(username);
+//            String newPref = anime.getAnimeID();
+//
+//            updateRef.update("anime", FieldValue.arrayUnion(newPref))
+//                    .addOnSuccessListener(aVoid -> {
+//                        Toast.makeText(context, "Anime successfully added!", Toast.LENGTH_SHORT).show();
+//                    })
+//                    .addOnFailureListener(e -> {
+//                        Toast.makeText(context, "Error adding added!", Toast.LENGTH_SHORT).show();
+//                    });
         });
 
         holder.deleteButton.setOnClickListener(v -> {
-            db.collection("anime") // Replace "anime" with your collection name
-                    .document(anime.getAnimeID())
-                    .delete()
+            int newPosition = holder.getAdapterPosition();
+
+            //if (newPosition == holder.getAdapterPosition())  return;
+
+            Anime animeToDelete = animeList.get(newPosition);
+            String imgUrl = animeToDelete.getImageUrl();
+            Log.d("MyAnimeAdapter", "Attempting to delete image with URL: " + imageUrl);
+
+            if (firebaseStorage == null) {
+                Log.e("MyAnimeAdapter", "FirebaseStorage is not initialized.");
+                //Toast.makeText(context, "Document successfully deleted!", Toast.LENGTH_SHORT).show();
+                return; // Exit to avoid null pointer exception
+            }
+
+            db.collection("users").document(username) // Replace "anime" with your collection name
+                    .update("anime", FieldValue.arrayRemove(animeToDelete.animeID))
                     .addOnSuccessListener(aVoid -> {
-                        // Handle success
-                        //Log.d("AnimeAdapter", "Document successfully deleted!");
-                        StorageReference sdb = firebaseStorage.getReferenceFromUrl(anime.getImageUrl());
-                        sdb.delete()
-                                .addOnSuccessListener(aVoid1 -> {
-                                    System.out.println("Image File Deleted");
-                                })
-                                .addOnFailureListener(e -> {
-                                    System.out.println("Error file deletion");
-                                });
+
+                        animeList.remove(newPosition);
+                        //updateList(animeList);
+                        notifyItemChanged(newPosition);
                         Toast.makeText(context, "Document successfully deleted!", Toast.LENGTH_SHORT).show();
+
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
@@ -185,4 +195,5 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
             addButton = itemView.findViewById(R.id.addButton);
         }
     }
+
 }

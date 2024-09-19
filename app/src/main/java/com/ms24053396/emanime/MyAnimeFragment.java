@@ -23,6 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +44,10 @@ public class MyAnimeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private RecyclerView recyclerView;
-    private AnimeAdapter adapter;
+    private MyAnimeAdaptor adapter;
     private List<Anime> animeList = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     public MyAnimeFragment() {
         // Required empty public constructor
     }
@@ -85,7 +86,7 @@ public class MyAnimeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_anime, container, false);
         recyclerView = view.findViewById(R.id.recyclerViewMyAnime);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new AnimeAdapter(requireContext(), animeList);
+        adapter = new MyAnimeAdaptor(requireContext(), firebaseStorage, animeList);
         recyclerView.setAdapter(adapter);
 
         loadMyAnimePrefFromFirestore();
