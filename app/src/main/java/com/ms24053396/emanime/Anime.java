@@ -40,7 +40,7 @@ public class Anime {
     Integer episodeCount = 0;
     List<Episode> episodes;
     Float rating;
-    String imageUrl;
+    String image;
 
     public String getAnimeID() {
         return animeID;
@@ -82,11 +82,11 @@ public class Anime {
         this.rating = rating;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageUrl(String image) {
-        this.imageUrl = image;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

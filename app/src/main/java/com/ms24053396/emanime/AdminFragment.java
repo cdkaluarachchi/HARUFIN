@@ -109,7 +109,7 @@ public class AdminFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openImagePicker();
-                submitButton.setEnabled(false);
+                //submitButton.setEnabled(false);
             }
         });
 
@@ -158,7 +158,7 @@ public class AdminFragment extends Fragment {
                     anime.setAnimeID(animeID);
                     anime.setName(name);
                     anime.setEpisodeCount(episodeCount);
-                    anime.setImageUrl(img);
+                    anime.setImage(img);
 
                     try{
                         firestore.collection("anime").document(animeID).set(anime)
@@ -206,11 +206,12 @@ public class AdminFragment extends Fragment {
         try {
             InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
-            uploadImageToStorage(byteArray);
-            //img = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            //uploadImageToStorage(byteArray);
+            img = Base64.encodeToString(byteArray, Base64.DEFAULT);
             //textViewBase64.setText(base64String);
             //System.out.println(base64String);
         } catch (Exception e) {

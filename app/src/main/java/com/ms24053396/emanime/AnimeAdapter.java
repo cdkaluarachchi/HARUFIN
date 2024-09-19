@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +67,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         Anime anime = animeList.get(position);
         holder.nameTextView.setText(anime.getName());
         holder.episodeCountTextView.setText(String.valueOf(anime.getEpisodeCount()));
-        String imageUrl = anime.getImageUrl();
+        String image = anime.getImage();
 
         HandlerThread handlerThread = new HandlerThread("NetworkThread");
         handlerThread.start();
@@ -75,24 +76,34 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         SharedPreferences sharedPreferences = context.getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
 
-        // Check if image is cached in memory
-        if (imageUrl != null) {
-            if (imageCache.containsKey(imageUrl)) {
-                holder.animeImage.setImageBitmap(imageCache.get(imageUrl));
-            } else {
-                // Check if image is cached on disk
-                File imageFile = new File(cacheDir, String.valueOf(imageUrl.hashCode()));
-                if (imageFile.exists()) {
-                    Bitmap bmp = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-                    if (bmp != null) {
-                        imageCache.put(imageUrl, bmp); // Cache in memory
-                        holder.animeImage.setImageBitmap(bmp);
-                    }
-                } else {
-                    loadImage(holder, imageUrl, imageFile);
-                }
-            }
+        if (image != null){
+            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
+
+            // Convert the byte array to a Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+            // Set the Bitmap to the ImageView
+            holder.animeImage.setImageBitmap(bitmap);
         }
+
+        // Check if image is cached in memory
+//        if (imageUrl != null) {
+//            if (imageCache.containsKey(imageUrl)) {
+//                holder.animeImage.setImageBitmap(imageCache.get(imageUrl));
+//            } else {
+//                // Check if image is cached on disk
+//                File imageFile = new File(cacheDir, String.valueOf(imageUrl.hashCode()));
+//                if (imageFile.exists()) {
+//                    Bitmap bmp = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+//                    if (bmp != null) {
+//                        imageCache.put(imageUrl, bmp); // Cache in memory
+//                        holder.animeImage.setImageBitmap(bmp);
+//                    }
+//                } else {
+//                    loadImage(holder, imageUrl, imageFile);
+//                }
+//            }
+//        }
 
         holder.addButton.setOnClickListener(v -> {
             DocumentReference updateRef = db.collection("users").document(username);
@@ -109,23 +120,11 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
         holder.deleteButton.setOnClickListener(v -> {
             int newPosition = holder.getAdapterPosition();
-            String animeid = anime.getImageUrl();
+            String animeid = anime.getImage();
             db.collection("anime") // Replace "anime" with your collection name
                     .document(anime.getAnimeID())
                     .delete()
                     .addOnSuccessListener(aVoid -> {
-                        if (animeid != null) {
-                            StorageReference sdb = firebaseStorage.getReferenceFromUrl(animeid);
-                            sdb.delete()
-                                    .addOnSuccessListener(aVoid1 -> {
-
-                                        System.out.println("Image File Deleted");
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        System.out.println("Error file deletion");
-                                    });
-                        }
-                        //animeList.remove(newPosition);
                         notifyItemChanged(newPosition);
                         Toast.makeText(context, "Document successfully deleted!", Toast.LENGTH_SHORT).show();
                     })
@@ -137,7 +136,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
         });
     }
-
+    // NOT USED
     private void loadImage(AnimeViewHolder holder, String imageUrl, File imageFile) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler mainHandler = new Handler(Looper.getMainLooper());

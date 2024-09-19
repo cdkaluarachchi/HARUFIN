@@ -36,7 +36,8 @@
                 android:layout_height="37dp"
                 android:layout_weight="12"
                 android:contentDescription="AnimeIcon"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@tools:sample/avatars"
+                android:background="@drawable/rounded_image_background"/>
 
             <TextView
                 android:id="@+id/textAnimeName"
