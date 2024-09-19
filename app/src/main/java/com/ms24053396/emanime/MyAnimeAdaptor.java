@@ -1,7 +1,6 @@
 package com.ms24053396.emanime;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -31,14 +30,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.HashMap;
 
-
-public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder> {
+public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeViewHolder> {
 
     private List<Anime> animeList;
     private HashMap<String, Bitmap> imageCache = new HashMap<>();
@@ -46,7 +43,8 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
     private FirebaseFirestore firestore;
     private FirebaseStorage firebaseStorage;
     private Context context;
-    public AnimeAdapter(Context context, List<Anime> animeList) {
+
+    public MyAnimeAdaptor(Context context, List<Anime> animeList) {
         this.animeList = animeList;
         this.cacheDir = context.getCacheDir().getAbsolutePath();
         this.firestore = firestore;
@@ -55,13 +53,13 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
     @NonNull
     @Override
-    public AnimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_anime, parent, false);
-        return new AnimeViewHolder(view);
+    public MyAnimeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_anime_my_view, parent, false);
+        return new MyAnimeViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AnimeViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyAnimeViewHolder holder, int position) {
         Anime anime = animeList.get(position);
         holder.nameTextView.setText(anime.getName());
         holder.episodeCountTextView.setText(String.valueOf(anime.getEpisodeCount()));
@@ -132,7 +130,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         });
     }
 
-    private void loadImage(AnimeViewHolder holder, String imageUrl, File imageFile) {
+        private void loadImage(MyAnimeViewHolder holder, String imageUrl, File imageFile) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -168,7 +166,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         return animeList.size();
     }
 
-    public static class AnimeViewHolder extends RecyclerView.ViewHolder {
+    public static class MyAnimeViewHolder extends RecyclerView.ViewHolder {
 
         //TextView animeIDTextView;
         ImageView animeImage;
@@ -177,7 +175,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         Button deleteButton;
         Button addButton;
 
-        public AnimeViewHolder(@NonNull View itemView) {
+        public MyAnimeViewHolder(@NonNull View itemView) {
             super(itemView);
             //animeIDTextView = itemView.findViewById(R.id.textAnimeID);
             animeImage = itemView.findViewById(R.id.animeImage);
@@ -187,5 +185,4 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
             addButton = itemView.findViewById(R.id.addButton);
         }
     }
-
 }

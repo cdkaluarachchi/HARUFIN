@@ -1,9 +1,12 @@
 package com.ms24053396.emanime;
 
+import java.util.List;
+
 public class User {
     private String username;
     private String password;
     private String type = "standard";
+    private List<String> anime;
 
     public String getUsername() {
         return username;
@@ -27,5 +30,13 @@ public class User {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<String> getAnime() {
+        return anime;
+    }
+
+    public void setAnime(List<String> anime) {
+        this.anime = anime;
     }
 }
