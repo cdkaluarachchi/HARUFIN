@@ -6,6 +6,7 @@ public class User {
     private String username;
     private String password;
     private String type = "standard";
+    private String dp;
     private List<String> anime;
 
     public String getUsername() {
@@ -36,7 +37,10 @@ public class User {
         return anime;
     }
 
-    public void setAnime(List<String> anime) {
-        this.anime = anime;
-    }
+    public void setAnime(List<String> anime) { this.anime = anime; }
+
+    public String getDp() { return dp; }
+
+    public void setDp(String dp) {  this.dp = dp; }
+
 }

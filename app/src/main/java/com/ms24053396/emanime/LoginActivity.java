@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                                     String DBusername = document.getString("username");
                                     String DBhashedPassword = document.getString("password");
                                     String userType = document.getString("type");
-
+                                    String userDP = document.getString("dp");
                                     String localHash = hashPassword(password);
                                     // !username.isEmpty() && !password.isEmpty()
                                     if (Objects.equals(DBhashedPassword, localHash)) {
@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("username", username);
                                         editor.putString("type", userType);
                                         editor.putString("isLoggedIn", String.valueOf(true));
+                                        editor.putString("userDP", userDP);
                                         editor.apply();
 
                                         if (userType.equals("standard")){

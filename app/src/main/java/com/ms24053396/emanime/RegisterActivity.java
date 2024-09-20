@@ -1,11 +1,20 @@
 package com.ms24053396.emanime;
 
+import static android.app.PendingIntent.getActivity;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.button.MaterialButton;
@@ -13,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -23,6 +34,9 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText editTextUsername, editTextPassword, editTextRePassword;
     private DatabaseReference databaseReference;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private static final int PICK_IMAGE = 1;
+    private ImageView registerImage;
+    public String img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +46,13 @@ public class RegisterActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
 
+        registerImage = findViewById(R.id.registerImageView);
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextRePassword = findViewById(R.id.editTextRePassword);
 
         MaterialButton buttonRegister = findViewById(R.id.buttonRegister);
-
+        MaterialButton buttonDP = findViewById(R.id.registerPhotoButton);
         // Initialize Firebase Realtime Database reference
         //databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
@@ -47,8 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = Objects.requireNonNull(editTextUsername.getText()).toString().trim();
                 String password = Objects.requireNonNull(editTextPassword.getText()).toString().trim();
                 String rePassword = Objects.requireNonNull(editTextRePassword.getText()).toString().trim();
-
-
 
                 if (password.equals(rePassword)) {
                     if (!username.isEmpty() && !password.isEmpty()) {
@@ -69,6 +82,14 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Password do not match", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        buttonDP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImagePicker();
+                //submitButton.setEnabled(false);
             }
         });
     }
@@ -123,6 +144,9 @@ public class RegisterActivity extends AppCompatActivity {
         User user = new User();
         user.setUsername(username);
         user.setPassword(hashedPassword);
+        if (img != null) {
+            user.setDp(img);
+        }
         // Push the data to the database under a unique key
         try{
             firestore.collection("users").document(username).set(user)
@@ -138,6 +162,42 @@ public class RegisterActivity extends AppCompatActivity {
                     });
         }catch (Exception e){
             Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            //getActivity();
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Uri selectedImage = data.getData();
+                registerImage.setImageURI(selectedImage);
+                convertImageToBase64(selectedImage);
+            }
+        }
+    }
+
+    private void convertImageToBase64(Uri imageUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            //uploadImageToStorage(byteArray);
+            img = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            //textViewBase64.setText(base64String);
+            //System.out.println(base64String);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

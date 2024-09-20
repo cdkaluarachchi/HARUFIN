@@ -12,49 +12,49 @@
 
         <TextView
             android:id="@+id/usernameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_width="124dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="92dp"
+            android:text="username"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.051"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewProfile"
+            app:layout_constraintEnd_toStartOf="@+id/logoutProfileButton"
+            app:layout_constraintHorizontal_bias="0.461"
+            app:layout_constraintStart_toEndOf="@+id/greetingsTextViewStatic"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.064" />
-
-        <TextView
-            android:id="@+id/textViewCompletedStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="84dp"
-            android:text="Completed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
+            app:layout_constraintVertical_bias="0.025" />
 
         <TextView
             android:id="@+id/TextViewStaticEpisodes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="20dp"
             android:text="Total Episodes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCompletedStatic"
-            app:layout_constraintVertical_bias="0.031" />
+            app:layout_constraintVertical_bias="0.053" />
+
+        <TextView
+            android:id="@+id/textViewCompletedStatic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Completed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
 
         <TextView
             android:id="@+id/TextViewCompleted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="84dp"
+            android:layout_marginTop="20dp"
             android:text="0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.261"
+            app:layout_constraintHorizontal_bias="0.254"
             app:layout_constraintStart_toEndOf="@+id/textViewCompletedStatic"
-            app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
 
         <TextView
             android:id="@+id/TextViewEpisodeCount"
@@ -64,10 +64,10 @@
             android:text="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.199"
+            app:layout_constraintHorizontal_bias="0.193"
             app:layout_constraintStart_toEndOf="@+id/TextViewStaticEpisodes"
             app:layout_constraintTop_toBottomOf="@+id/TextViewCompleted"
-            app:layout_constraintVertical_bias="0.033"
+            app:layout_constraintVertical_bias="0.062"
             tools:ignore="NotSibling" />
 
         <Button
@@ -75,13 +75,31 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="135dp"
             android:layout_height="40dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="92dp"
+            android:layout_marginEnd="28dp"
             android:text="Log Out"
-            app:layout_constraintBottom_toTopOf="@+id/TextViewCompleted"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.833"
-            app:layout_constraintStart_toEndOf="@+id/usernameTextView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.262" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageViewProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="44dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/greetingsTextViewStatic"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/greetingsTextViewStatic"
+            android:layout_width="64dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="92dp"
+            android:text="Hello"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

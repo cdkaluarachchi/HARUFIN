@@ -19,7 +19,7 @@
 
 
         <LinearLayout
-            android:layout_width="221dp"
+            android:layout_width="239dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginBottom="4dp"
@@ -35,9 +35,9 @@
                 android:layout_width="139dp"
                 android:layout_height="37dp"
                 android:layout_weight="12"
+                android:background="@drawable/rounded_image_background"
                 android:contentDescription="AnimeIcon"
-                tools:src="@tools:sample/avatars"
-                android:background="@drawable/rounded_image_background"/>
+                tools:src="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/textAnimeName"
