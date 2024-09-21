@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class AdminFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private TextInputEditText editTextAnimeID, editTextName, editTextEpisodeCount;
+    private EditText editTextDescription;
     private MaterialButton submitButton;
     private TextView animeCountTextView, userCountTextView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -101,6 +103,7 @@ public class AdminFragment extends Fragment {
         submitButton = view.findViewById(R.id.adminSubmitButton);
         userCountTextView = view.findViewById(R.id.textViewUserCount);
         animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
+        editTextDescription = view.findViewById(R.id.editTextDescriptionAdmin);
 
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
         imageViewAnime = view.findViewById(R.id.imageViewAdmin);
@@ -147,6 +150,7 @@ public class AdminFragment extends Fragment {
                 String animeID = editTextAnimeID.getText().toString().trim();
                 String name = editTextName.getText().toString().trim();
                 String episodeCountStr = editTextEpisodeCount.getText().toString().trim();
+                String description = String.valueOf(editTextDescription.getText());
 
                 // Basic input validation
                 if (animeID.isEmpty() || name.isEmpty() || episodeCountStr.isEmpty()) {
@@ -159,6 +163,7 @@ public class AdminFragment extends Fragment {
                     anime.setName(name);
                     anime.setEpisodeCount(episodeCount);
                     anime.setImage(img);
+                    anime.setDescription(description);
 
                     try{
                         firestore.collection("anime").document(animeID).set(anime)
@@ -206,14 +211,25 @@ public class AdminFragment extends Fragment {
         try {
             InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
+
+            // Get the original width and height of the bitmap
+            int originalWidth = bitmap.getWidth();
+            int originalHeight = bitmap.getHeight();
+
+            // Define the target width and height (keeping aspect ratio)
+            int targetWidth = 500;
+            int targetHeight = (int) ((double) originalHeight / originalWidth * targetWidth);
+
+            // Resize the bitmap while preserving aspect ratio
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
+
+            // Compress the bitmap to a byte array
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
-            //uploadImageToStorage(byteArray);
+
+            // Encode the byte array to Base64
             img = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            //textViewBase64.setText(base64String);
-            //System.out.println(base64String);
         } catch (Exception e) {
             e.printStackTrace();
         }

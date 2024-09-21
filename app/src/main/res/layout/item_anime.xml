@@ -19,7 +19,7 @@
 
 
         <LinearLayout
-            android:layout_width="239dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="4dp"
             android:layout_marginBottom="4dp"
@@ -30,14 +30,16 @@
             app:layout_constraintVertical_bias="0.057"
             tools:layout_editor_absoluteX="0dp">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/animeImage"
                 android:layout_width="139dp"
                 android:layout_height="37dp"
                 android:layout_weight="12"
                 android:contentDescription="AnimeIcon"
-                tools:src="@tools:sample/avatars"
-                android:background="@drawable/rounded_image_background"/>
+                android:background="@drawable/rounded_image_background"
+                tools:src="@tools:sample/avatars" />
+
+
 
             <TextView
                 android:id="@+id/textAnimeName"
@@ -73,28 +75,42 @@
 
         </LinearLayout>
 
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="140dp"
-            android:orientation="horizontal">
+            android:layout_width="219dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/addButton"
-                style="@style/Widget.Material3.Button.IconButton.Outlined"
+            <TextView
+                android:id="@+id/textViewDescriptionMyItemAnime"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_add_24px" />
+                android:layout_marginLeft="115dp"
 
-            <Button
-                android:id="@+id/deleteButton"
-                style="@style/Widget.Material3.Button.IconButton.Outlined"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/ic_remove_48px" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addButton"
+                    style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_add_24px" />
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_remove_48px" />
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

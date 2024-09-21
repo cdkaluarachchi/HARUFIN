@@ -16,8 +16,8 @@
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="379dp"
-            android:layout_height="380dp"
+            android:layout_width="381dp"
+            android:layout_height="423dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:orientation="vertical"
@@ -84,13 +84,13 @@
             <LinearLayout
                 android:id="@+id/linearLayout5"
                 android:layout_width="wrap_content"
-                android:layout_height="147dp"
+                android:layout_height="174dp"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/editTextDescriptionAdmin"
                     android:layout_width="wrap_content"
-                    android:layout_height="136dp"
+                    android:layout_height="119dp"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Description"
@@ -101,14 +101,14 @@
                     android:id="@+id/linearLayout4"
                     android:layout_width="wrap_content"
 
-                    android:layout_height="147dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/imageViewAdmin"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="27dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="111dp"
+
                         android:background="#A6A5A5"
                         android:scaleType="centerCrop" />
 
@@ -117,13 +117,14 @@
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+                        android:layout_marginTop="10dp"
                         android:text="Select Image" />
 
 
                 </LinearLayout>
 
             </LinearLayout>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/adminSubmitButton"
                 style="?attr/materialButtonOutlinedStyle"

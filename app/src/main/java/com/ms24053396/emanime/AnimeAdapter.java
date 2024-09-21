@@ -25,14 +25,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,6 +65,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         Anime anime = animeList.get(position);
         holder.nameTextView.setText(anime.getName());
         holder.episodeCountTextView.setText(String.valueOf(anime.getEpisodeCount()));
+        holder.descriptionTextView.setText(String.valueOf(anime.getDescription()));
         String image = anime.getImage();
 
         HandlerThread handlerThread = new HandlerThread("NetworkThread");
@@ -178,7 +177,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         //TextView animeIDTextView;
         ImageView animeImage;
         TextView nameTextView;
-        TextView episodeCountTextView;
+        TextView episodeCountTextView, descriptionTextView;
         Button deleteButton;
         Button addButton;
 
@@ -188,6 +187,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
             animeImage = itemView.findViewById(R.id.animeImage);
             nameTextView = itemView.findViewById(R.id.textAnimeName);
             episodeCountTextView = itemView.findViewById(R.id.textEpisodeCount);
+            descriptionTextView = itemView.findViewById(R.id.textViewDescriptionMyItemAnime);
             deleteButton = itemView.findViewById(R.id.deleteButton);
             addButton = itemView.findViewById(R.id.addButton);
         }

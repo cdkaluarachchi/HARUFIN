@@ -187,15 +187,27 @@ public class RegisterActivity extends AppCompatActivity {
     private void convertImageToBase64(Uri imageUri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            //InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true);
+
+            // Get the original width and height of the bitmap
+            int originalWidth = bitmap.getWidth();
+            int originalHeight = bitmap.getHeight();
+
+            // Define the target width and height (keeping aspect ratio)
+            int targetWidth = 500;
+            int targetHeight = (int) ((double) originalHeight / originalWidth * targetWidth);
+
+            // Resize the bitmap while preserving aspect ratio
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
+
+            // Compress the bitmap to a byte array
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
-            //uploadImageToStorage(byteArray);
+
+            // Encode the byte array to Base64
             img = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            //textViewBase64.setText(base64String);
-            //System.out.println(base64String);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -83,14 +83,15 @@
             app:layout_constraintTop_toBottomOf="@+id/TextViewStaticEpisodes"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageViewProfile"
-            android:layout_width="114dp"
-            android:layout_height="111dp"
+            android:layout_width="110dp"
+            android:layout_height="107dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="44dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/greetingsTextViewStatic"
+            app:shapeAppearanceOverlay="@style/CircularImageView"
             tools:src="@tools:sample/avatars" />
 
         <TextView

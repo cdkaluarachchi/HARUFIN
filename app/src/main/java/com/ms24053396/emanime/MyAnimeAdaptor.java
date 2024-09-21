@@ -65,6 +65,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
         Anime anime = animeList.get(position);
         holder.nameTextView.setText(anime.getName());
         holder.episodeCountTextView.setText(String.valueOf(anime.getEpisodeCount()));
+        holder.descriptionTextView.setText(String.valueOf(anime.getDescription()));
         String image = anime.getImage();
 
         HandlerThread handlerThread = new HandlerThread("NetworkThread");
@@ -183,7 +184,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
         //TextView animeIDTextView;
         ImageView animeImage;
         TextView nameTextView;
-        TextView episodeCountTextView;
+        TextView episodeCountTextView, descriptionTextView;
         Button deleteButton;
         Button addButton;
 
@@ -193,6 +194,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
             animeImage = itemView.findViewById(R.id.animeImage);
             nameTextView = itemView.findViewById(R.id.textAnimeName);
             episodeCountTextView = itemView.findViewById(R.id.textEpisodeCount);
+            descriptionTextView = itemView.findViewById(R.id.textViewDescriptionMyItemAnime);
             deleteButton = itemView.findViewById(R.id.deleteButton);
             addButton = itemView.findViewById(R.id.addButton);
         }
