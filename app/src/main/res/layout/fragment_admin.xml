@@ -80,38 +80,56 @@
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <LinearLayout
-                android:id="@+id/linearLayout4"
-                android:layout_width="350dp"
-                android:layout_height="100dp"
+                android:id="@+id/linearLayout5"
+                android:layout_width="wrap_content"
+                android:layout_height="147dp"
                 android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonSelectImage"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_marginTop="50dp"
+                <EditText
+                    android:id="@+id/editTextDescriptionAdmin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select Image" />
+                    android:layout_height="136dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Description"
+                    android:inputType="textMultiLine"
+                    android:text="" />
 
-                <ImageView
-                    android:id="@+id/imageViewAdmin"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginLeft="110dp"
-                    android:scaleType="centerCrop" />
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="wrap_content"
 
+                    android:layout_height="147dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imageViewAdmin"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="27dp"
+                        android:background="#A6A5A5"
+                        android:scaleType="centerCrop" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonSelectImage"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="Select Image" />
+
+
+                </LinearLayout>
 
             </LinearLayout>
-
-
-            <!-- Button to submit anime info -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/adminSubmitButton"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="10dp"
                 android:text="Submit" />
 
         </LinearLayout>
