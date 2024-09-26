@@ -14,26 +14,44 @@
             android:id="@+id/usernameTextView"
             android:layout_width="124dp"
             android:layout_height="33dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="68dp"
             android:text="username"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageViewProfile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.068"
-            app:layout_constraintStart_toEndOf="@+id/greetingsTextViewStatic"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/TextViewStaticEpisodes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="28dp"
             android:text="Total Episodes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCompletedStatic"
-            app:layout_constraintVertical_bias="0.03" />
+            app:layout_constraintVertical_bias="0.04" />
+
+        <TextView
+            android:id="@+id/TextViewCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="116dp"
+            android:text="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.248"
+            app:layout_constraintStart_toEndOf="@+id/textViewCompletedStatic"
+            app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
+
+        <TextView
+            android:id="@+id/textViewCompletedStatic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="116dp"
+            android:text="Completed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
 
         <TextView
             android:id="@+id/TextViewEpisodeCount"
@@ -43,66 +61,37 @@
             android:text="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.193"
+            app:layout_constraintHorizontal_bias="0.195"
             app:layout_constraintStart_toEndOf="@+id/TextViewStaticEpisodes"
             app:layout_constraintTop_toBottomOf="@+id/TextViewCompleted"
-            app:layout_constraintVertical_bias="0.038"
+            app:layout_constraintVertical_bias="0.042"
             tools:ignore="NotSibling" />
-
-        <TextView
-            android:id="@+id/textViewCompletedStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:text="Completed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
-
-        <TextView
-            android:id="@+id/TextViewCompleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.254"
-            app:layout_constraintStart_toEndOf="@+id/textViewCompletedStatic"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
 
         <Button
             android:id="@+id/logoutProfileButton"
             style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="135dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="216dp"
-            android:layout_marginEnd="36dp"
+            android:layout_width="98dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="4dp"
             android:text="Log Out"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/TextViewCompleted"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewStaticEpisodes"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintHorizontal_bias="0.815"
+            app:layout_constraintStart_toEndOf="@+id/usernameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile"
+            app:layout_constraintVertical_bias="0.367" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageViewProfile"
-            android:layout_width="110dp"
-            android:layout_height="107dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginTop="44dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/greetingsTextViewStatic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.81"
+            app:layout_constraintStart_toEndOf="@+id/usernameTextView"
+            app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircularImageView"
             tools:src="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/greetingsTextViewStatic"
-            android:layout_width="64dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="92dp"
-            android:text="Hello"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

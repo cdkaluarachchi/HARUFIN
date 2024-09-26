@@ -1,15 +1,24 @@
 package com.ms24053396.emanime;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +35,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import com.google.firebase.appcheck.FirebaseAppCheck;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import com.google.firebase.appcheck.FirebaseAppCheck;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AdminFragment#newInstance} factory method to
@@ -54,6 +71,10 @@ public class AdminFragment extends Fragment {
     public String img;
     private FirebaseStorage storage;
     private StorageReference storageRef;
+    private static final int CAMERA_PERMISSION_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private Uri imageUri;
+
     public AdminFragment() {
         // Required empty public constructor
     }
@@ -106,7 +127,16 @@ public class AdminFragment extends Fragment {
         editTextDescription = view.findViewById(R.id.editTextDescriptionAdmin);
 
         Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
+        Button cameraButton = view.findViewById(R.id.buttonCamera);
         imageViewAnime = view.findViewById(R.id.imageViewAdmin);
+
+        cameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openCamera();
+            }
+        });
         //int animeCount = 0;
         buttonSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,14 +227,51 @@ public class AdminFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == PICK_IMAGE) {
             getActivity();
             if (resultCode == Activity.RESULT_OK && data != null) {
                 Uri selectedImage = data.getData();
                 imageViewAnime.setImageURI(selectedImage);
                 convertImageToBase64(selectedImage);
+
             }
         }
+
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            imageViewAnime.setImageBitmap(image);
+
+            File tempFile = new File(requireContext().getCacheDir(), "temp_image.jpg");
+            FileOutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(tempFile);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Compress the Bitmap and write it to the file
+            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            try {
+                outputStream.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Get the Uri of the temporary file
+            Uri imageUri = FileProvider.getUriForFile(requireContext(),
+                    requireContext().getPackageName() + ".provider",
+                    tempFile);
+
+            convertImageToBase64(imageUri);
+        }
+
+
     }
 
     private void convertImageToBase64(Uri imageUri) {
@@ -233,6 +300,43 @@ public class AdminFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void openCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(getActivity(), "Camera permission is required to use this feature.", Toast.LENGTH_SHORT).show();
+                Log.e("Camera", "Camera permission denied");
+            }
+        }
+    }
+
+    // This method creates a temporary file to save the captured image
+    private File createImageFile() throws IOException {
+        // Create an image file name with a timestamp
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        // Get the directory for the app's private pictures directory
+        File storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        // Create the file where the photo will be saved
+        return File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
     }
 
     private void uploadImageToStorage(byte[] imgData) {

@@ -196,7 +196,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
             episodeCountTextView = itemView.findViewById(R.id.textEpisodeCount);
             descriptionTextView = itemView.findViewById(R.id.textViewDescriptionMyItemAnime);
             deleteButton = itemView.findViewById(R.id.deleteButton);
-            addButton = itemView.findViewById(R.id.addButton);
+            addButton = itemView.findViewById(R.id.editButton);
         }
     }
 
