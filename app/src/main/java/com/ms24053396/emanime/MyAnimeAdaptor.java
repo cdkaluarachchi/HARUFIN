@@ -1,6 +1,8 @@
 package com.ms24053396.emanime;
 
 import static android.content.Context.MODE_PRIVATE;
+
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +48,8 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
     private String cacheDir;
     private FirebaseStorage firebaseStorage;
     private Context context;
-
+    private String cat = "anime";
+    String selectedOption = "";
     public MyAnimeAdaptor(Context context,FirebaseStorage storage, List<Anime> animeList) {
         this.animeList = animeList;
         this.cacheDir = context.getCacheDir().getAbsolutePath();
@@ -103,18 +107,56 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
 //            }
 //        }
 
-        holder.addButton.setOnClickListener(v -> {
-            Toast.makeText(context, "Not Implemented", Toast.LENGTH_SHORT).show();
-//            DocumentReference updateRef = db.collection("users").document(username);
-//            String newPref = anime.getAnimeID();
-//
-//            updateRef.update("anime", FieldValue.arrayUnion(newPref))
-//                    .addOnSuccessListener(aVoid -> {
-//                        Toast.makeText(context, "Anime successfully added!", Toast.LENGTH_SHORT).show();
-//                    })
-//                    .addOnFailureListener(e -> {
-//                        Toast.makeText(context, "Error adding added!", Toast.LENGTH_SHORT).show();
-//                    });
+        holder.editButton.setOnClickListener(v -> {
+
+            String[] options = {"Completed", "On Hold", "Watching", "Dropped", "Plan to watch"};
+
+            // Create the AlertDialog
+            new AlertDialog.Builder(context)
+                    .setTitle("Select Status")
+                    .setItems(options, (dialog, which) -> {
+                        // Handle the selected option
+                        String selectedOption = options[which];
+
+                        switch(selectedOption) {
+                            case "Completed":
+                                cat = "completed";
+                                break;
+                            case "On Hold":
+                                cat = "onHold";
+                                break;
+                            case "Watching":
+                                cat = "watching";
+                                break;
+                            case "Dropped":
+                                cat = "dropped";
+                                break;
+                            case "Plan to watch":
+                                cat = "planToWatch";
+                                break;
+                        }
+                        int newPosition = holder.getAdapterPosition();
+
+                        DocumentReference updateRef = db.collection("users").document(username);
+                        String newPref = anime.getAnimeID();
+
+                        updateRef.update("completed", FieldValue.arrayRemove(newPref));
+                        updateRef.update("onHold", FieldValue.arrayRemove(newPref));
+                        updateRef.update("watching", FieldValue.arrayRemove(newPref));
+                        updateRef.update("dropped", FieldValue.arrayRemove(newPref));
+                        updateRef.update("planToWatch", FieldValue.arrayRemove(newPref));
+
+                        updateRef.update(cat, FieldValue.arrayUnion(newPref))
+                                .addOnSuccessListener(aVoid -> {
+                                    animeList.remove(newPosition);
+                                    notifyItemChanged(newPosition);
+                                    Toast.makeText(context, "Anime successfully added!", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(context, "Error adding added!", Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .show();
         });
 
         holder.deleteButton.setOnClickListener(v -> {
@@ -125,11 +167,10 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
             Anime animeToDelete = animeList.get(newPosition);
 
             db.collection("users").document(username) // Replace "anime" with your collection name
-                    .update("anime", FieldValue.arrayRemove(animeToDelete.animeID))
+                    .update(cat, FieldValue.arrayRemove(animeToDelete.animeID))
                     .addOnSuccessListener(aVoid -> {
 
                         animeList.remove(newPosition);
-                        //updateList(animeList);
                         notifyItemChanged(newPosition);
                         Toast.makeText(context, "Document successfully deleted!", Toast.LENGTH_SHORT).show();
 
@@ -141,6 +182,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
                     });
 
         });
+
     }
 
         private void loadImage(MyAnimeViewHolder holder, String image, File imageFile) {
@@ -186,7 +228,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
         TextView nameTextView;
         TextView episodeCountTextView, descriptionTextView;
         Button deleteButton;
-        Button addButton;
+        Button editButton;
 
         public MyAnimeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -196,7 +238,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
             episodeCountTextView = itemView.findViewById(R.id.textEpisodeCount);
             descriptionTextView = itemView.findViewById(R.id.textViewDescriptionMyItemAnime);
             deleteButton = itemView.findViewById(R.id.deleteButton);
-            addButton = itemView.findViewById(R.id.editButton);
+            editButton = itemView.findViewById(R.id.editButton);
         }
     }
 

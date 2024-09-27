@@ -9,12 +9,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -52,6 +55,11 @@ public class MyAnimeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+    //private MyAnimePagerAdapter pagerAdapter;
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -84,19 +92,81 @@ public class MyAnimeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_anime, container, false);
+
+        tabLayout = view.findViewById(R.id.tabLayout);
+        viewPager = view.findViewById(R.id.viewPager);
+
+        // Set up the adapter
+
         recyclerView = view.findViewById(R.id.recyclerViewMyAnime);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         adapter = new MyAnimeAdaptor(requireContext(), firebaseStorage, animeList);
         recyclerView.setAdapter(adapter);
-
-        loadMyAnimePrefFromFirestore();
+        tabLayout = view.findViewById(R.id.tabLayout);
+        //loadMyAnimePrefFromFirestore();
+        loadMyAnimePrefFromFirestore("anime");
+        setupTabLayout();
 
         return view;
 
         //return inflater.inflate(R.layout.fragment_my_anime, container, false);
     }
 
-    private void loadMyAnimePrefFromFirestore() {
+    private void setupTabLayout() {
+        tabLayout.addTab(tabLayout.newTab().setText("Plan to Watch"));
+        tabLayout.addTab(tabLayout.newTab().setText("Completed"));
+        tabLayout.addTab(tabLayout.newTab().setText("On Hold"));
+        tabLayout.addTab(tabLayout.newTab().setText("Watching"));
+        tabLayout.addTab(tabLayout.newTab().setText("Dropped"));
+
+        // Set up TabSelectedListener to handle tab changes
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        animeList.clear();
+                        adapter.notifyDataSetChanged();
+                        loadMyAnimePrefFromFirestore("planToWatch");
+                        break;
+                    case 1:
+                        animeList.clear();
+                        adapter.notifyDataSetChanged();
+                        loadMyAnimePrefFromFirestore("completed");
+                        break;
+                    case 2:
+                        animeList.clear();
+                        adapter.notifyDataSetChanged();
+                        loadMyAnimePrefFromFirestore("onHold");
+                        break;
+                    case 3:
+                        animeList.clear();
+                        adapter.notifyDataSetChanged();
+                        loadMyAnimePrefFromFirestore("watching");
+                        break;
+                    case 4:
+                        animeList.clear();
+                        adapter.notifyDataSetChanged();
+                        loadMyAnimePrefFromFirestore("dropped");
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // Handle tab unselected if needed
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Handle tab reselected if needed
+            }
+        });
+    }
+
+    private void loadMyAnimePrefFromFirestore(String cat) {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
 
@@ -105,7 +175,7 @@ public class MyAnimeFragment extends Fragment {
 
         userRef.get().addOnSuccessListener(documentSnapshot -> {
             if(documentSnapshot.exists()){
-                List<String> animeIdList = (List<String>) documentSnapshot.get("anime");
+                List<String> animeIdList = (List<String>) documentSnapshot.get(cat);
 
                 if (animeIdList != null && !animeIdList.isEmpty()){
                     loadMyAnimeFromFirestore(animeIdList);

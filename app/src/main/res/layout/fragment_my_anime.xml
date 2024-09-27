@@ -5,18 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyAnimeFragment">
-
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="15dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewMyAnime"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="699dp"
-            android:layout_margin="16dp" />
+            android:layout_height="match_parent"
+            tools:context=".MyAnimeFragment">
 
-    </FrameLayout>
+            <!-- TabLayout for the secondary menu -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorSurface"
+                app:tabIndicatorColor="?attr/colorPrimary"
+                app:tabTextColor="?attr/colorOnSurface"
+                app:tabSelectedTextColor="?attr/colorPrimary"
+                app:tabMode="scrollable"/>
+
+            <!-- ViewPager2 to display anime lists based on selection -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_below="@id/tabLayout" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewMyAnime"
+                android:layout_width="match_parent"
+                android:layout_height="655dp"
+                android:layout_margin="16dp" />
+
+        </FrameLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

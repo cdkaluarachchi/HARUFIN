@@ -74,6 +74,10 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
 
         SharedPreferences sharedPreferences = context.getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
+        String userType = sharedPreferences.getString("type", null);
+        if (!userType.equals("admin")) {
+            holder.deleteButton.setVisibility(View.GONE);
+        }
 
         if (image != null){
             byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
@@ -108,7 +112,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
             DocumentReference updateRef = db.collection("users").document(username);
             String newPref = anime.getAnimeID();
 
-            updateRef.update("anime", FieldValue.arrayUnion(newPref))
+            updateRef.update("planToWatch", FieldValue.arrayUnion(newPref))
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(context, "Anime successfully added!", Toast.LENGTH_SHORT).show();
                     })
@@ -120,7 +124,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.AnimeViewHol
         holder.deleteButton.setOnClickListener(v -> {
             int newPosition = holder.getAdapterPosition();
             String animeid = anime.getImage();
-            db.collection("anime") // Replace "anime" with your collection name
+            db.collection("planToWatch") // Replace "anime" with your collection name
                     .document(anime.getAnimeID())
                     .delete()
                     .addOnSuccessListener(aVoid -> {

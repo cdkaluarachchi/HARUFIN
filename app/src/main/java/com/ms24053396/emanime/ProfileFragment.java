@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -35,6 +38,7 @@ public class ProfileFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String username;
+    private String completedCount;
     private String mParam2;
 
     public ProfileFragment() {
@@ -72,9 +76,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         TextView textViewUsername = (TextView) view.findViewById(R.id.usernameTextView);
+        TextView textCompleted = (TextView) view.findViewById(R.id.TextViewCompleted);
         ImageView dp = view.findViewById(R.id.imageViewProfile);
 
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
@@ -93,7 +99,21 @@ public class ProfileFragment extends Fragment {
             dp.setImageBitmap(bitmap);
         }
 
-        Button logoutButton = (android.widget.Button) view.findViewById(R.id.logoutProfileButton);
+        firestore.collection("users")
+                .document(username)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Get the count of documents in the collection
+                        List<String> completedList = (List<String>) task.getResult().get("completed");
+                        textCompleted.setText(String.valueOf(completedList.size()));
+                    } else {
+                        // Handle the error
+                        System.out.println("Error getting documents: " + task.getException());
+                    }
+                });
+
+        Button logoutButton = (Button) view.findViewById(R.id.logoutProfileButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){

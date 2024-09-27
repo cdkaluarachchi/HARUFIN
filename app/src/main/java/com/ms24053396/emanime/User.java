@@ -8,6 +8,52 @@ public class User {
     private String type = "standard";
     private String dp;
     private List<String> anime;
+    private List<String> completed;
+    private List<String> onHold;
+    private List<String> watching;
+    private List<String> dropped;
+    private List<String> planToWatch;
+
+    public List<String> getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(List<String> completed) {
+        this.completed = completed;
+    }
+
+    public List<String> getOnHold() {
+        return onHold;
+    }
+
+    public void setOnHold(List<String> onHold) {
+        this.onHold = onHold;
+    }
+
+    public List<String> getWatching() {
+        return watching;
+    }
+
+    public void setWatching(List<String> watching) {
+        this.watching = watching;
+    }
+
+    public List<String> getDropped() {
+        return dropped;
+    }
+
+    public void setDropped(List<String> dropped) {
+        this.dropped = dropped;
+    }
+
+    public List<String> getPlanToWatch() {
+        return planToWatch;
+    }
+
+    public void setPlanToWatch(List<String> planToWatch) {
+        this.planToWatch = planToWatch;
+    }
+
 
     public String getUsername() {
         return username;

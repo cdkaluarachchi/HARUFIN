@@ -39,7 +39,7 @@
             android:layout_marginTop="116dp"
             android:text="0"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.248"
+            app:layout_constraintHorizontal_bias="0.258"
             app:layout_constraintStart_toEndOf="@+id/textViewCompletedStatic"
             app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
 
@@ -47,7 +47,7 @@
             android:id="@+id/textViewCompletedStatic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="28dp"
             android:layout_marginTop="116dp"
             android:text="Completed"
             app:layout_constraintStart_toStartOf="parent"
