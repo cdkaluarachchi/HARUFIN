@@ -1,4 +1,4 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.ms24053396.emanime", appContext.getPackageName());
+        assertEquals("com.ms24053396.harufin", appContext.getPackageName());
     }
 }

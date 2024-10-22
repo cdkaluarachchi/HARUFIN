@@ -1,4 +1,4 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import android.os.Bundle;
 
