@@ -1,9 +1,5 @@
 package com.ms24053396.harufin;
 
-import static android.app.PendingIntent.getActivity;
-
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -37,9 +32,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -133,8 +125,6 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    //Log.w("Firestore", "Error checking document: ", e);
-                    // Handle error, e.g., show a generic error message
                     Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
@@ -161,9 +151,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Store the username and hashed password in Firebase Realtime Database
     private void registerUser(String username, String hashedPassword) {
-        //HashMap<String, String> userMap = new HashMap<>();
-        //userMap.put("username", username);
-        //userMap.put("password", hashedPassword);
         User user = new User();
         user.setUsername(username);
         user.setPassword(hashedPassword);

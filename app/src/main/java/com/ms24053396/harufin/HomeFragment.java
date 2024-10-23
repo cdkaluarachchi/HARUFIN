@@ -99,8 +99,10 @@ public class HomeFragment extends Fragment {
         BalanceTextView = view.findViewById(R.id.textViewBalance);
         loadTransactionsFromFirestore();
         BalanceTextView = (TextView) view.findViewById(R.id.textViewBalance);
+
         loadBalanceFromFirestore();
-        loadTransactionsFromFirestore();
+
+
         transfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +110,6 @@ public class HomeFragment extends Fragment {
                 showTransferDialog();
             }
         });
-
         return view;
     }
 
@@ -133,6 +134,7 @@ public class HomeFragment extends Fragment {
                 //List<String> completedList = (List<String>) task.getResult().get("completed");
                 currentBalance[0] = Double.parseDouble(task.getResult().get("balance").toString());
                 BalanceTextView.setText(String.valueOf(currentBalance[0]));
+                loadTransactionsFromFirestore();
             } else {
                 // Handle the error
                 System.out.println("Error getting documents: " + task.getException());

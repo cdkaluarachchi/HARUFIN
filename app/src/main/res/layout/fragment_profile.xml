@@ -14,23 +14,25 @@
             android:id="@+id/usernameTextView"
             android:layout_width="124dp"
             android:layout_height="33dp"
-            android:layout_marginStart="28dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="68dp"
             android:text="username"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.028" />
 
         <Button
             android:id="@+id/logoutProfileButton"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="98dp"
             android:layout_height="45dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="28dp"
             android:layout_marginEnd="4dp"
             android:text="Log Out"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.815"
+            app:layout_constraintHorizontal_bias="0.341"
             app:layout_constraintStart_toEndOf="@+id/usernameTextView"
             app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
 
@@ -38,9 +40,9 @@
             android:id="@+id/imageViewProfile"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="48dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.81"
+            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toEndOf="@+id/usernameTextView"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircularImageView"
@@ -48,25 +50,25 @@
 
         <LinearLayout
             android:id="@+id/frameLayout"
-            android:layout_width="297dp"
-            android:layout_height="185dp"
+            android:layout_width="356dp"
+            android:layout_height="179dp"
             android:layout_marginTop="40dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/profileUpdate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.245"
+            app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logoutProfileButton"
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="280dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:hint="Email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextEmail"
-                    android:layout_width="280dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:ems="14"
                     android:inputType="textEmailAddress"
@@ -75,12 +77,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="280dp"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:hint="Address">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextAddress"
-                    android:layout_width="280dp"
+                    android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:ems="14"
                     android:inputType="textPostalAddress"
@@ -88,20 +91,59 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/registerPhotoButton"
+                    style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:icon="@drawable/ic_image_24px"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                    app:layout_constraintVertical_bias="0.13" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/registerCameraButton"
+                    style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:icon="@drawable/ic_camera_24px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintVertical_bias="0.13" />
+            </LinearLayout>
 
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/profileUpdate"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="252dp"
-            style="?attr/materialButtonOutlinedStyle"
+            android:layout_marginBottom="240dp"
             android:text="Update"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.088"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:text="Welcome"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.343" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

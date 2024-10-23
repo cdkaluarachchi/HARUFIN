@@ -37,30 +37,29 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="181dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
-                    android:hint="Account ID">
+                    android:hint="From">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextAccountID"
-
+                        android:id="@+id/editTextSourceUserName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="157dp"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-
-                    android:hint="Balance">
+                    android:hint="To">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextBalance"
+                        android:id="@+id/editDestUserName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number" />
+                        android:inputType="text" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -71,13 +70,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="User Name">
+                android:hint="Amount">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editUserName"
+                    android:id="@+id/editTextAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
