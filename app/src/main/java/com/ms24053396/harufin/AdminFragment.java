@@ -1,6 +1,9 @@
 package com.ms24053396.harufin;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,6 +43,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,7 +124,8 @@ public class AdminFragment extends Fragment {
         userCountTextView = view.findViewById(R.id.textViewUserCount);
         animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
         //editTextDescription = view.findViewById(R.id.editTextDescriptionAdmin);
-
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
         //Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
         //Button cameraButton = view.findViewById(R.id.buttonCamera);
         //imageViewAnime = view.findViewById(R.id.imageViewAdmin);
@@ -182,16 +187,18 @@ public class AdminFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Convert episodeCount to Integer
-                    Double bal = Double.parseDouble(balance);
-                    TransactionAccount transactionAccount = new TransactionAccount();
-                    //transactionAccount.setAccountID(animeID);
-                    transactionAccount.setName(name);
-                    transactionAccount.setBalance(bal);
+                    Long bal = Long.parseLong(balance);
+
+                    Transaction transaction = new Transaction();
+                    //transaction.setTransactionId("0000000");
+                    transaction.setSourceUserName(username);
+                    transaction.setDestUserName(name);
+                    transaction.setAmount(bal);
                     //transactionAccount.setImage(img);
                     //transactionAccount.setDescription(description);
 
                     try{
-                        firestore.collection("transactionAccount").document(name).set(transactionAccount)
+                        firestore.collection("Transactions").document().set(transaction)
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(getActivity(), "TransactionAccount entry added successfully", Toast.LENGTH_SHORT).show();

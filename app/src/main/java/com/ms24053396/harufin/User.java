@@ -1,5 +1,6 @@
 package com.ms24053396.harufin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -10,6 +11,15 @@ public class User {
     private String type = "standard";
     private String dp;
     private Double balance = 0.0;
+    private List<Transaction> transactionList = new ArrayList<Transaction>();
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+    }
 
     public String getEmail() {
         return email;

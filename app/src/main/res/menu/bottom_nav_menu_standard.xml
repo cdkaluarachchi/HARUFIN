@@ -5,10 +5,6 @@
         android:icon="@drawable/ic_anime_my"
         android:title="Home" />
     <item
-        android:id="@+id/nav_my_anime"
-        android:icon="@drawable/ic_anime_all"
-        android:title="Transactions" />
-    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />

@@ -114,7 +114,7 @@ public class ProfileFragment extends Fragment {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.apply();
