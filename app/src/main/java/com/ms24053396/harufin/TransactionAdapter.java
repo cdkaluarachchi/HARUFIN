@@ -34,6 +34,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
         Transaction transaction = transactionList.get(position);
+        holder.dateTextView.setText(transaction.getDte());
         holder.sourceUserNameTextView.setText(transaction.getSourceUserName());
         holder.destUserNameTextView.setText(transaction.getDestUserName());
 
@@ -56,10 +57,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     public static class TransactionViewHolder extends RecyclerView.ViewHolder {
-        TextView sourceUserNameTextView, destUserNameTextView, amountTextView;
+        TextView sourceUserNameTextView, destUserNameTextView, amountTextView, dateTextView;
 
         public TransactionViewHolder(@NonNull View itemView) {
             super(itemView);
+            dateTextView = itemView.findViewById(R.id.date);
             sourceUserNameTextView = itemView.findViewById(R.id.textSourceUserName);
             destUserNameTextView = itemView.findViewById(R.id.textDestUserName);
             amountTextView = itemView.findViewById(R.id.textAmount);

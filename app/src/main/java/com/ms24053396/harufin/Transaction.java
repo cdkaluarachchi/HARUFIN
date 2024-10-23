@@ -1,7 +1,5 @@
 package com.ms24053396.harufin;
 
-import java.util.Date;
-
 class Transaction {
     String dte;
     Long accountId;
@@ -10,9 +8,7 @@ class Transaction {
     String destUserName;
     Long amount;
     public Transaction(){
-
     }
-
     public Transaction(String dte, Long accountId, String transactionId, String sourceUserName, String destUserName, Long amount) {
         this.dte = dte;
         this.accountId = accountId;

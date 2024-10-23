@@ -29,6 +29,5 @@ public class MainActivityStandard extends AppCompatActivity {
             NavigationUI.setupWithNavController(bottomNav, navController);
             return insets;
         });
-
     }
 }

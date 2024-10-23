@@ -2,29 +2,44 @@ package com.ms24053396.harufin;
 
 import static android.app.PendingIntent.getActivity;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -33,6 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private static final int PICK_IMAGE = 1;
+    private static final int CAMERA_PERMISSION_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 100;
     private ImageView registerImage;
     public String img;
     @Override
@@ -51,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         MaterialButton buttonRegister = findViewById(R.id.buttonRegister);
         MaterialButton buttonDP = findViewById(R.id.registerPhotoButton);
+        MaterialButton buttonCamera = findViewById(R.id.registerCameraButton);
         // Initialize Firebase Realtime Database reference
         //databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
@@ -88,6 +106,13 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 openImagePicker();
                 //submitButton.setEnabled(false);
+            }
+        });
+
+        buttonCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCamera();
             }
         });
     }
@@ -180,6 +205,49 @@ public class RegisterActivity extends AppCompatActivity {
                 convertImageToBase64(selectedImage);
             }
         }
+
+        if (requestCode == PICK_IMAGE) {
+            //getActivity();
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                Uri selectedImage = data.getData();
+                registerImage.setImageURI(selectedImage);
+                convertImageToBase64(selectedImage);
+
+            }
+        }
+
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            registerImage.setImageBitmap(image);
+            File cacheDir = getCacheDir();
+            File tempFile = new File(cacheDir.getAbsolutePath(), "temp_image.jpg");
+            FileOutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(tempFile);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Compress the Bitmap and write it to the file
+            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            try {
+                outputStream.flush();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Get the Uri of the temporary file
+            Uri imageUri = FileProvider.getUriForFile(this,
+                    getPackageName() + ".provider",
+                    tempFile);
+
+            convertImageToBase64(imageUri);
+        }
     }
 
     private void convertImageToBase64(Uri imageUri) {
@@ -210,4 +278,22 @@ public class RegisterActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    private void openCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required to use this feature.", Toast.LENGTH_SHORT).show();
+                Log.e("Camera", "Camera permission denied");
+            }
+        }
+    }
+
 }

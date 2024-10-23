@@ -17,11 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +30,6 @@ import android.widget.Toast;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -90,7 +87,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -114,10 +110,7 @@ public class HomeFragment extends Fragment {
         });
 
         return view;
-        //return inflater.inflate(R.layout.fragment_home, container, false);
-
     }
-
 
     private void setUpRecyclerView(List<Transaction> transactionList) {
         TransactionAdapter adapter = new TransactionAdapter(getContext(), transactionList, username);
@@ -145,65 +138,11 @@ public class HomeFragment extends Fragment {
                 System.out.println("Error getting documents: " + task.getException());
             }
         });
-
-//        // Declare totalBalance outside the scope of the queries
-//
-//
-//// First query: where username is the destination (add amounts)
-//        firestore.collection("Transactions")
-//                .whereEqualTo("destUserName", username)
-//                .get()
-//                .addOnCompleteListener(taskDest -> {
-//                    if (taskDest.isSuccessful()) {
-//                        // Loop through documents where username is the destination
-//                        for (DocumentSnapshot document : taskDest.getResult()) {
-//                            Double amount = document.getDouble("amount");
-//                            if (amount != null) {
-//                                totalBalance[0] += amount; // Add amount when username is destination
-//                            }
-//                        }
-//
-//                        // Log to check value after destination transactions
-//                        System.out.println("Total after destUsername query: " + totalBalance[0]);
-//
-//                        // Second query: where username is the source (subtract amounts)
-//                        firestore.collection("Transactions")
-//                                .whereEqualTo("sourceUserName", username)
-//                                .get()
-//                                .addOnCompleteListener(taskSource -> {
-//                                    if (taskSource.isSuccessful()) {
-//                                        // Loop through documents where username is the source
-//                                        for (DocumentSnapshot document : taskSource.getResult()) {
-//                                            Double amount = document.getDouble("amount");
-//                                            if (amount != null) {
-//                                                totalBalance[0] -= amount; // Subtract amount when username is source
-//                                            }
-//                                        }
-//
-//                                        // Log to check value after sourceUsername query
-//                                        System.out.println("Total after sourceUsername query: " + totalBalance[0]);
-//
-//                                        // Update the UI with the final total balance
-//                                        BalanceTextView.setText(String.valueOf(totalBalance[0]));
-//                                    } else {
-//                                        // Handle the error for the second query
-//                                        System.out.println("Error getting transactions (source): " + taskSource.getException());
-//                                    }
-//                                });
-//
-//                    } else {
-//                        // Handle the error for the first query
-//                        System.out.println("Error getting transactions (destination): " + taskDest.getException());
-//                    }
-//                });
-        }
-
+    }
 
     private void loadTransactionsFromFirestore() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = currentDateTime.format(formatter);
+
         // Fetch transactions where sourceUserName is the current user
         firestore.collection("Transactions")
                 .whereIn("sourceUserName", Collections.singletonList(username))
@@ -215,15 +154,13 @@ public class HomeFragment extends Fragment {
 
                         // Loop through the documents and add them to the list
                         for (DocumentSnapshot document : task.getResult()) {
+                            String date = document.getString("dte");
                             Long accountId = document.getLong("accountId");
                             String transactionId = document.getString("TransactionId");
                             String sourceUserName = document.getString("sourceUserName");
                             String destUserName = document.getString("destUserName");
                             Long amount = document.getLong("amount");
-
-
-
-                            transactionsList.add(new Transaction(formattedDateTime, accountId, transactionId, sourceUserName, destUserName, amount));
+                            transactionsList.add(new Transaction(date, accountId, transactionId, sourceUserName, destUserName, amount));
                         }
 
                         // Pass the transaction list to the adapter to display in RecyclerView
@@ -237,12 +174,13 @@ public class HomeFragment extends Fragment {
 
                                         // Loop through the documents and add them to the list
                                         for (DocumentSnapshot document : taskT.getResult()) {
+                                            String date = document.getString("dte");
                                             Long accountId = document.getLong("accountId");
                                             String transactionId = document.getString("TransactionId");
                                             String sourceUserName = document.getString("sourceUserName");
                                             String destUserName = document.getString("destUserName");
                                             Long amount = document.getLong("amount");
-                                            transactionsList.add(new Transaction(formattedDateTime, accountId, transactionId, sourceUserName, destUserName, amount));
+                                            transactionsList.add(new Transaction(date, accountId, transactionId, sourceUserName, destUserName, amount));
                                         }
 
                                         // Pass the transaction list to the adapter to display in RecyclerView
@@ -256,7 +194,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-
 
     public void showTransferDialog() {
         // Create a dialog for input
@@ -329,19 +266,15 @@ public class HomeFragment extends Fragment {
 
     private void executeTransaction(String destUserName, Long amount) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
         // Calculate the current balance using the previously implemented method
         loadBalanceFromFirestore(); // Ensure the balance is loaded and updated
 
-        // Use totalBalance[0] to check if the user has enough balance
-        //Long currentBal = currentBalance[0];  // Assuming totalBalance is a class-level variable
-
         if (currentBalance[0] >= amount) {
-            // Create a new transaction document
-            Date dte = new Date();
 
-            long curentDt = dte.getTime();
-            Transaction transaction = new Transaction(null, null, username, destUserName, amount);
+            Transaction transaction = new Transaction(formattedDateTime,null, null, username, destUserName, amount);
 
             firestore.collection("Transactions").add(transaction).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -366,8 +299,4 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Insufficient balance for this transaction.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-
 }

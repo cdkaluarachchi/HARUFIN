@@ -21,65 +21,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/TextViewStaticEpisodes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:text="Total Episodes"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCompletedStatic"
-            app:layout_constraintVertical_bias="0.04" />
-
-        <TextView
-            android:id="@+id/TextViewCompleted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="116dp"
-            android:text="0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.258"
-            app:layout_constraintStart_toEndOf="@+id/textViewCompletedStatic"
-            app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
-
-        <TextView
-            android:id="@+id/textViewCompletedStatic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="116dp"
-            android:text="Completed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usernameTextView" />
-
-        <TextView
-            android:id="@+id/TextViewEpisodeCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.195"
-            app:layout_constraintStart_toEndOf="@+id/TextViewStaticEpisodes"
-            app:layout_constraintTop_toBottomOf="@+id/TextViewCompleted"
-            app:layout_constraintVertical_bias="0.042"
-            tools:ignore="NotSibling" />
-
         <Button
             android:id="@+id/logoutProfileButton"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="98dp"
             android:layout_height="45dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="4dp"
             android:text="Log Out"
-            app:layout_constraintBottom_toTopOf="@+id/TextViewCompleted"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.815"
             app:layout_constraintStart_toEndOf="@+id/usernameTextView"
-            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile"
-            app:layout_constraintVertical_bias="0.367" />
+            app:layout_constraintTop_toBottomOf="@+id/imageViewProfile" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageViewProfile"
@@ -92,6 +45,63 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/CircularImageView"
             tools:src="@tools:sample/avatars" />
+
+        <LinearLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="297dp"
+            android:layout_height="185dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/profileUpdate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.245"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoutProfileButton"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:hint="Email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:ems="14"
+                    android:inputType="textEmailAddress"
+                    android:text="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:hint="Address">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextAddress"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:ems="14"
+                    android:inputType="textPostalAddress"
+                    android:text="" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/profileUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="252dp"
+            style="?attr/materialButtonOutlinedStyle"
+            android:text="Update"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.088"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

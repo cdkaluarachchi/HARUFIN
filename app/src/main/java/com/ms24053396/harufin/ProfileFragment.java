@@ -17,9 +17,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,38 +79,48 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         TextView textViewUsername = (TextView) view.findViewById(R.id.usernameTextView);
-        TextView textCompleted = (TextView) view.findViewById(R.id.TextViewCompleted);
+        TextView textViewEmail = (TextView) view.findViewById(R.id.editTextEmail);
+        TextView textAddress = (TextView) view.findViewById(R.id.editTextAddress);
         ImageView dp = view.findViewById(R.id.imageViewProfile);
-
+        Button updateButton = view.findViewById(R.id.profileUpdate);
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
         username = sharedPreferences.getString("username", null);
         //System.out.println(username);
         String image = sharedPreferences.getString("userDP", null);
+
         textViewUsername.setText(username);
+        firestore.collection("users")
+                .document(username)
+                .get()
+                .addOnCompleteListener(task -> {
 
-//        if (image != null || image.length() < 2){
-//            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
-//
-//            // Convert the byte array to a Bitmap
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-//
-//            // Set the Bitmap to the ImageView
-//            dp.setImageBitmap(bitmap);
-//        }
+                    if (task.isSuccessful()) {
+                        String em = (String) task.getResult().get("email");
+                        String addr = (String) task.getResult().get("address");
 
-//        firestore.collection("users")
-//                .document(username)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        // Get the count of documents in the collection
-//                        List<String> completedList = (List<String>) task.getResult().get("completed");
-//                        textCompleted.setText(String.valueOf(completedList.size()));
-//                    } else {
-//                        // Handle the error
-//                        System.out.println("Error getting documents: " + task.getException());
-//                    }
-//                });
+                        if (em != null){
+                            textViewEmail.setText(em);
+                        }
+                        if (addr != null){
+                            textAddress.setText(addr);
+                        }
+
+                        //textAddress.setText(Objects.requireNonNull(task.getResult().get("address")).toString());
+                    } else {
+                        // Handle the error
+                        System.out.println("Error getting documents: " + task.getException());
+                    }
+                });
+
+        if (image != null ){
+            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
+
+            // Convert the byte array to a Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+
+            // Set the Bitmap to the ImageView
+            dp.setImageBitmap(bitmap);
+        }
 
         Button logoutButton = (Button) view.findViewById(R.id.logoutProfileButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -123,9 +135,14 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
-       // return inflater.inflate(R.layout.fragment_profile, container, false);
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                firestore.collection("users").document(username).update("email", textViewEmail.getText().toString(), "address", textAddress.getText().toString());
+            }
+        });
         return view;
     }
-
 
 }

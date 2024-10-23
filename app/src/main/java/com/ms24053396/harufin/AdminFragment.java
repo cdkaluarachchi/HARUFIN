@@ -61,18 +61,15 @@ public class AdminFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private TextInputEditText editTextAccountID, editTextUserName, editTextBalance;
-    //private EditText editTextDescription;
     private MaterialButton submitButton;
-    private TextView animeCountTextView, userCountTextView;
+    private TextView userCountTextView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private static final int PICK_IMAGE = 1;
-    //private ImageView imageViewAnime;
     public String img;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 100;
-    //private Uri imageUri;
 
     public AdminFragment() {
         // Required empty public constructor
@@ -122,7 +119,7 @@ public class AdminFragment extends Fragment {
         editTextBalance = view.findViewById(R.id.editTextBalance);
         submitButton = view.findViewById(R.id.adminSubmitButton);
         userCountTextView = view.findViewById(R.id.textViewUserCount);
-        animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
+        //animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
         //editTextDescription = view.findViewById(R.id.editTextDescriptionAdmin);
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
@@ -159,18 +156,18 @@ public class AdminFragment extends Fragment {
                     }
                 });
 
-        firestore.collection("anime")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Get the count of documents in the collection
-                        int animeCount = task.getResult().size();
-                        animeCountTextView.setText(String.valueOf(animeCount));
-                    } else {
-                        // Handle the error
-                        System.out.println("Error getting documents: " + task.getException());
-                    }
-                });
+//        firestore.collection("anime")
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        // Get the count of documents in the collection
+//                        //int animeCount = task.getResult().size();
+//                        //animeCountTextView.setText(String.valueOf(animeCount));
+//                    } else {
+//                        // Handle the error
+//                        System.out.println("Error getting documents: " + task.getException());
+//                    }
+//                });
 
         // Set click listener for submit button
         submitButton.setOnClickListener(new View.OnClickListener() {
