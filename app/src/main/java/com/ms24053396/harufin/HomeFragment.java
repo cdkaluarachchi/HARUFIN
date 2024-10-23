@@ -23,7 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import android.graphics.Color;
 import android.widget.Toast;
@@ -148,7 +147,7 @@ public class HomeFragment extends Fragment {
         // Fetch transactions where sourceUserName is the current user
         firestore.collection("Transactions")
                 .whereIn("sourceUserName", Collections.singletonList(username))
-
+                //.orderBy("dte", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -184,8 +183,7 @@ public class HomeFragment extends Fragment {
                                             Long amount = document.getLong("amount");
                                             transactionsList.add(new Transaction(date, accountId, transactionId, sourceUserName, destUserName, amount));
                                         }
-
-                                        // Pass the transaction list to the adapter to display in RecyclerView
+                                        Collections.reverse(transactionsList);
                                         setUpRecyclerView(transactionsList);
                                     } else {
                                         System.out.println("Error getting transactions: " + taskT.getException());

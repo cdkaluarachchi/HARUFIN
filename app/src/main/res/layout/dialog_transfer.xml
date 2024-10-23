@@ -8,19 +8,33 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <EditText
-            android:id="@+id/editDestUserName"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Destination Username"
-            android:inputType="text" />
+            android:hint="Destination Username">
 
-        <EditText
-            android:id="@+id/editAmount"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDestUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Amount"
-            android:inputType="number" />
+            android:hint="Amount">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
