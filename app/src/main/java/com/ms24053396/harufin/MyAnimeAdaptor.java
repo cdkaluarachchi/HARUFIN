@@ -1,4 +1,4 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -11,25 +11,21 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,15 +39,15 @@ import java.util.concurrent.Executors;
 
 public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeViewHolder> {
 
-    private List<Anime> animeList;
+    private List<TransactionAccount> transactionAccountList;
     private HashMap<String, Bitmap> imageCache = new HashMap<>();
     private String cacheDir;
     private FirebaseStorage firebaseStorage;
     private Context context;
     private String cat = "anime";
     String selectedOption = "";
-    public MyAnimeAdaptor(Context context,FirebaseStorage storage, List<Anime> animeList) {
-        this.animeList = animeList;
+    public MyAnimeAdaptor(Context context,FirebaseStorage storage, List<TransactionAccount> transactionAccountList) {
+        this.transactionAccountList = transactionAccountList;
         this.cacheDir = context.getCacheDir().getAbsolutePath();
         this.firebaseStorage = storage;
         this.context = context;
@@ -66,11 +62,11 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
 
     @Override
     public void onBindViewHolder(@NonNull MyAnimeViewHolder holder, int position) {
-        Anime anime = animeList.get(position);
-        holder.nameTextView.setText(anime.getName());
-        holder.episodeCountTextView.setText(String.valueOf(anime.getEpisodeCount()));
-        holder.descriptionTextView.setText(String.valueOf(anime.getDescription()));
-        String image = anime.getImage();
+        //TransactionAccount transactionAccount = transactionAccountList.get(position);
+        //holder.nameTextView.setText(transactionAccount.getName());
+        //holder.episodeCountTextView.setText(String.valueOf(transactionAccount.getEpisodeCount()));
+        //holder.descriptionTextView.setText(String.valueOf(transactionAccount.getDescription()));
+        //String image = transactionAccount.getImage();
 
         HandlerThread handlerThread = new HandlerThread("NetworkThread");
         handlerThread.start();
@@ -79,15 +75,15 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
         SharedPreferences sharedPreferences = context.getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
         String username = sharedPreferences.getString("username", null);
 
-        if (image != null){
-            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
-
-            // Convert the byte array to a Bitmap
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-
-            // Set the Bitmap to the ImageView
-            holder.animeImage.setImageBitmap(bitmap);
-        }
+//        if (image != null){
+//            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
+//
+//            // Convert the byte array to a Bitmap
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+//
+//            // Set the Bitmap to the ImageView
+//            holder.animeImage.setImageBitmap(bitmap);
+//        }
         // Check if image is cached in memory
 //        if (imageUrl != null) {
 //            if (imageCache.containsKey(imageUrl)) {
@@ -138,23 +134,23 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
                         int newPosition = holder.getAdapterPosition();
 
                         DocumentReference updateRef = db.collection("users").document(username);
-                        String newPref = anime.getAnimeID();
+                        //String newPref = transactionAccount.getAccountID();
 
-                        updateRef.update("completed", FieldValue.arrayRemove(newPref));
-                        updateRef.update("onHold", FieldValue.arrayRemove(newPref));
-                        updateRef.update("watching", FieldValue.arrayRemove(newPref));
-                        updateRef.update("dropped", FieldValue.arrayRemove(newPref));
-                        updateRef.update("planToWatch", FieldValue.arrayRemove(newPref));
+//                        updateRef.update("completed", FieldValue.arrayRemove(newPref));
+//                        updateRef.update("onHold", FieldValue.arrayRemove(newPref));
+//                        updateRef.update("watching", FieldValue.arrayRemove(newPref));
+//                        updateRef.update("dropped", FieldValue.arrayRemove(newPref));
+//                        updateRef.update("planToWatch", FieldValue.arrayRemove(newPref));
 
-                        updateRef.update(cat, FieldValue.arrayUnion(newPref))
-                                .addOnSuccessListener(aVoid -> {
-                                    animeList.remove(newPosition);
-                                    notifyItemChanged(newPosition);
-                                    Toast.makeText(context, "Anime successfully added!", Toast.LENGTH_SHORT).show();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(context, "Error adding added!", Toast.LENGTH_SHORT).show();
-                                });
+//                        updateRef.update(cat, FieldValue.arrayUnion(newPref))
+//                                .addOnSuccessListener(aVoid -> {
+//                                    transactionAccountList.remove(newPosition);
+//                                    notifyItemChanged(newPosition);
+//                                    Toast.makeText(context, "TransactionAccount successfully added!", Toast.LENGTH_SHORT).show();
+//                                })
+//                                .addOnFailureListener(e -> {
+//                                    Toast.makeText(context, "Error adding added!", Toast.LENGTH_SHORT).show();
+//                                });
                     })
                     .show();
         });
@@ -164,20 +160,20 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
 
             //if (newPosition == holder.getAdapterPosition())  return;
 
-            Anime animeToDelete = animeList.get(newPosition);
+            TransactionAccount transactionAccountToDelete = transactionAccountList.get(newPosition);
 
-            db.collection("users").document(username) // Replace "anime" with your collection name
-                    .update(cat, FieldValue.arrayRemove(animeToDelete.animeID))
+            db.collection("users").document(username) // Replace "transactionAccount" with your collection name
+                    .update(cat, FieldValue.arrayRemove(transactionAccountToDelete.accountID))
                     .addOnSuccessListener(aVoid -> {
 
-                        animeList.remove(newPosition);
+                        transactionAccountList.remove(newPosition);
                         notifyItemChanged(newPosition);
                         Toast.makeText(context, "Document successfully deleted!", Toast.LENGTH_SHORT).show();
 
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
-                        //Log.w("AnimeAdapter", "Error deleting document", e);
+                        //Log.w("HomeAdapter", "Error deleting document", e);
                         Toast.makeText(context, "Error deleting document", Toast.LENGTH_SHORT).show();
                     });
 
@@ -218,7 +214,7 @@ public class MyAnimeAdaptor extends RecyclerView.Adapter<MyAnimeAdaptor.MyAnimeV
 
     @Override
     public int getItemCount() {
-        return animeList.size();
+        return transactionAccountList.size();
     }
 
     public static class MyAnimeViewHolder extends RecyclerView.ViewHolder {

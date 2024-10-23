@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.ms24053396.emanime'
+    namespace 'com.ms24053396.harufin'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.ms24053396.emanime"
+        applicationId "com.ms24053396.harufin"
         minSdk 30
         targetSdk 30
         versionCode 1

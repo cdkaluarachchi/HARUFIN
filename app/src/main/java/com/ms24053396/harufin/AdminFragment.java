@@ -1,8 +1,7 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,12 +10,10 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,10 +39,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import com.google.firebase.appcheck.FirebaseAppCheck;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AdminFragment#newInstance} factory method to
@@ -61,19 +56,19 @@ public class AdminFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextInputEditText editTextAnimeID, editTextName, editTextEpisodeCount;
-    private EditText editTextDescription;
+    private TextInputEditText editTextAccountID, editTextUserName, editTextBalance;
+    //private EditText editTextDescription;
     private MaterialButton submitButton;
     private TextView animeCountTextView, userCountTextView;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private static final int PICK_IMAGE = 1;
-    private ImageView imageViewAnime;
+    //private ImageView imageViewAnime;
     public String img;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private static final int CAMERA_PERMISSION_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 100;
-    private Uri imageUri;
+    //private Uri imageUri;
 
     public AdminFragment() {
         // Required empty public constructor
@@ -118,33 +113,33 @@ public class AdminFragment extends Fragment {
         storageRef = storage.getReference();
         //FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         //firebaseAppCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProvider.Factory.getInstance());
-        editTextAnimeID = view.findViewById(R.id.editTextAnimeID);
-        editTextName = view.findViewById(R.id.editTextName);
-        editTextEpisodeCount = view.findViewById(R.id.editTextEpisodeCount);
+        editTextAccountID = view.findViewById(R.id.editTextAccountID);
+        editTextUserName = view.findViewById(R.id.editUserName);
+        editTextBalance = view.findViewById(R.id.editTextBalance);
         submitButton = view.findViewById(R.id.adminSubmitButton);
         userCountTextView = view.findViewById(R.id.textViewUserCount);
         animeCountTextView = view.findViewById(R.id.textViewAnimeCount);
-        editTextDescription = view.findViewById(R.id.editTextDescriptionAdmin);
+        //editTextDescription = view.findViewById(R.id.editTextDescriptionAdmin);
 
-        Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
-        Button cameraButton = view.findViewById(R.id.buttonCamera);
-        imageViewAnime = view.findViewById(R.id.imageViewAdmin);
+        //Button buttonSelectImage = view.findViewById(R.id.buttonSelectImage);
+        //Button cameraButton = view.findViewById(R.id.buttonCamera);
+        //imageViewAnime = view.findViewById(R.id.imageViewAdmin);
 
-        cameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                openCamera();
-            }
-        });
+//        cameraButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                openCamera();
+//            }
+//        });
         //int animeCount = 0;
-        buttonSelectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openImagePicker();
-                //submitButton.setEnabled(false);
-            }
-        });
+//        buttonSelectImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openImagePicker();
+//                //submitButton.setEnabled(false);
+//            }
+//        });
 
         firestore.collection("users")
                 .get()
@@ -177,29 +172,29 @@ public class AdminFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Get values from input fields
-                String animeID = editTextAnimeID.getText().toString().trim();
-                String name = editTextName.getText().toString().trim();
-                String episodeCountStr = editTextEpisodeCount.getText().toString().trim();
-                String description = String.valueOf(editTextDescription.getText());
+                String accountID = editTextAccountID.getText().toString().trim();
+                String name = editTextUserName.getText().toString().trim();
+                String balance = editTextBalance.getText().toString().trim();
+                //String description = String.valueOf(editTextDescription.getText());
 
                 // Basic input validation
-                if (animeID.isEmpty() || name.isEmpty() || episodeCountStr.isEmpty()) {
+                if (name.isEmpty() || balance.isEmpty()) {
                     Toast.makeText(getActivity(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Convert episodeCount to Integer
-                    Integer episodeCount = Integer.parseInt(episodeCountStr);
-                    Anime anime = new Anime();
-                    anime.setAnimeID(animeID);
-                    anime.setName(name);
-                    anime.setEpisodeCount(episodeCount);
-                    anime.setImage(img);
-                    anime.setDescription(description);
+                    Double bal = Double.parseDouble(balance);
+                    TransactionAccount transactionAccount = new TransactionAccount();
+                    //transactionAccount.setAccountID(animeID);
+                    transactionAccount.setName(name);
+                    transactionAccount.setBalance(bal);
+                    //transactionAccount.setImage(img);
+                    //transactionAccount.setDescription(description);
 
                     try{
-                        firestore.collection("anime").document(animeID).set(anime)
+                        firestore.collection("transactionAccount").document(name).set(transactionAccount)
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(getActivity(), "Anime entry added successfully", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "TransactionAccount entry added successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(getActivity(), "Process failed", Toast.LENGTH_SHORT).show();
                                     }
@@ -209,7 +204,7 @@ public class AdminFragment extends Fragment {
 
                     }
                     // Here you can handle saving animeID, name, and episodeCount
-                    Toast.makeText(getActivity(), "Anime Info Submitted: " + name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "TransactionAccount Info Submitted: " + name, Toast.LENGTH_SHORT).show();
 
                     // You can also send this data to Firebase or a database
                 }
@@ -228,48 +223,48 @@ public class AdminFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE) {
-            getActivity();
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                Uri selectedImage = data.getData();
-                imageViewAnime.setImageURI(selectedImage);
-                convertImageToBase64(selectedImage);
+//        if (requestCode == PICK_IMAGE) {
+//            getActivity();
+//            if (resultCode == Activity.RESULT_OK && data != null) {
+//                Uri selectedImage = data.getData();
+//                imageViewAnime.setImageURI(selectedImage);
+//                convertImageToBase64(selectedImage);
+//
+//            }
+//        }
 
-            }
-        }
-
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            imageViewAnime.setImageBitmap(image);
-
-            File tempFile = new File(requireContext().getCacheDir(), "temp_image.jpg");
-            FileOutputStream outputStream = null;
-            try {
-                outputStream = new FileOutputStream(tempFile);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            // Compress the Bitmap and write it to the file
-            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            try {
-                outputStream.flush();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            // Get the Uri of the temporary file
-            Uri imageUri = FileProvider.getUriForFile(requireContext(),
-                    requireContext().getPackageName() + ".provider",
-                    tempFile);
-
-            convertImageToBase64(imageUri);
-        }
+//        if (requestCode == CAMERA_REQUEST_CODE) {
+//            Bitmap image = (Bitmap) data.getExtras().get("data");
+//            imageViewAnime.setImageBitmap(image);
+//
+//            File tempFile = new File(requireContext().getCacheDir(), "temp_image.jpg");
+//            FileOutputStream outputStream = null;
+//            try {
+//                outputStream = new FileOutputStream(tempFile);
+//            } catch (FileNotFoundException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            // Compress the Bitmap and write it to the file
+//            image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+//            try {
+//                outputStream.flush();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            try {
+//                outputStream.close();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            // Get the Uri of the temporary file
+//            Uri imageUri = FileProvider.getUriForFile(requireContext(),
+//                    requireContext().getPackageName() + ".provider",
+//                    tempFile);
+//
+//            convertImageToBase64(imageUri);
+//        }
 
 
     }

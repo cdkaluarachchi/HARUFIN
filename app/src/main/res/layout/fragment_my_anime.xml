@@ -27,7 +27,7 @@
                 app:tabSelectedTextColor="?attr/colorPrimary"
                 app:tabMode="scrollable"/>
 
-            <!-- ViewPager2 to display anime lists based on selection -->
+            <!-- ViewPager2 to display transactionAccount lists based on selection -->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"

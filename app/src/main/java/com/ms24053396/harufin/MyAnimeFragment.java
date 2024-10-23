@@ -1,10 +1,10 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.content.Context;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,10 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -48,7 +45,7 @@ public class MyAnimeFragment extends Fragment {
     private String mParam2;
     private RecyclerView recyclerView;
     private MyAnimeAdaptor adapter;
-    private List<Anime> animeList = new ArrayList<>();
+    private List<TransactionAccount> transactionAccountList = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     public MyAnimeFragment() {
@@ -101,7 +98,7 @@ public class MyAnimeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewMyAnime);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new MyAnimeAdaptor(requireContext(), firebaseStorage, animeList);
+        adapter = new MyAnimeAdaptor(requireContext(), firebaseStorage, transactionAccountList);
         recyclerView.setAdapter(adapter);
         tabLayout = view.findViewById(R.id.tabLayout);
         //loadMyAnimePrefFromFirestore();
@@ -126,27 +123,27 @@ public class MyAnimeFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        animeList.clear();
+                        transactionAccountList.clear();
                         adapter.notifyDataSetChanged();
                         loadMyAnimePrefFromFirestore("planToWatch");
                         break;
                     case 1:
-                        animeList.clear();
+                        transactionAccountList.clear();
                         adapter.notifyDataSetChanged();
                         loadMyAnimePrefFromFirestore("completed");
                         break;
                     case 2:
-                        animeList.clear();
+                        transactionAccountList.clear();
                         adapter.notifyDataSetChanged();
                         loadMyAnimePrefFromFirestore("onHold");
                         break;
                     case 3:
-                        animeList.clear();
+                        transactionAccountList.clear();
                         adapter.notifyDataSetChanged();
                         loadMyAnimePrefFromFirestore("watching");
                         break;
                     case 4:
-                        animeList.clear();
+                        transactionAccountList.clear();
                         adapter.notifyDataSetChanged();
                         loadMyAnimePrefFromFirestore("dropped");
                         break;
@@ -198,10 +195,10 @@ public class MyAnimeFragment extends Fragment {
                     return;
                 }
 
-                animeList.clear();
+                transactionAccountList.clear();
                 for (QueryDocumentSnapshot doc : value) {
-                    Anime anime = doc.toObject(Anime.class);
-                    animeList.add(anime);
+                    TransactionAccount transactionAccount = doc.toObject(TransactionAccount.class);
+                    transactionAccountList.add(transactionAccount);
                 }
                 adapter.notifyDataSetChanged();
             }

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "587691413586",
-    "project_id": "emanime-cdklu",
-    "storage_bucket": "emanime-cdklu.appspot.com"
+    "project_number": "378460397505",
+    "project_id": "harufin-abc88",
+    "storage_bucket": "harufin-abc88.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:587691413586:android:b100a346f0e660ee3a4f8b",
+        "mobilesdk_app_id": "1:378460397505:android:652686bc7a34bce9e55940",
         "android_client_info": {
-          "package_name": "com.ms24053396.emanime"
+          "package_name": "com.ms24053396.harufin"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBe_JMfkOgYXtuWuk20eHA2pf4HQ3_TlgA"
+          "current_key": "AIzaSyCBI32OLsivan88pV6Ux3LyIXuZM6gcVlo"
         }
       ],
       "services": {

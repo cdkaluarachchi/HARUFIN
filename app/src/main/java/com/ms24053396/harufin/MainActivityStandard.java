@@ -1,4 +1,4 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import android.os.Bundle;
 
@@ -13,22 +13,22 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityStandard extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_main_standard);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
+            BottomNavigationView bottomNav = findViewById(R.id.bottom_nav_standard);
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
             NavigationUI.setupWithNavController(bottomNav, navController);
             return insets;
         });
+
     }
 }

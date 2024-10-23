@@ -1,4 +1,4 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         Button buttonLogin = findViewById(R.id.buttonLogin);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         // to skip login if alread logged in
         if (sharedPreferences.contains("isLoggedIn") && (sharedPreferences.contains("type"))) {

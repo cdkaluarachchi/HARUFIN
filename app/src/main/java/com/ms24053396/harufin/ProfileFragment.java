@@ -1,8 +1,6 @@
-package com.ms24053396.emanime;
+package com.ms24053396.harufin;
 
 import static android.content.Context.MODE_PRIVATE;
-
-import static androidx.core.app.ActivityCompat.finishAffinity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,35 +80,35 @@ public class ProfileFragment extends Fragment {
         TextView textCompleted = (TextView) view.findViewById(R.id.TextViewCompleted);
         ImageView dp = view.findViewById(R.id.imageViewProfile);
 
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("EMANIMEPrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
         username = sharedPreferences.getString("username", null);
         //System.out.println(username);
         String image = sharedPreferences.getString("userDP", null);
         textViewUsername.setText(username);
 
-        if (image != null){
-            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
+//        if (image != null || image.length() < 2){
+//            byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
+//
+//            // Convert the byte array to a Bitmap
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+//
+//            // Set the Bitmap to the ImageView
+//            dp.setImageBitmap(bitmap);
+//        }
 
-            // Convert the byte array to a Bitmap
-            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
-
-            // Set the Bitmap to the ImageView
-            dp.setImageBitmap(bitmap);
-        }
-
-        firestore.collection("users")
-                .document(username)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Get the count of documents in the collection
-                        List<String> completedList = (List<String>) task.getResult().get("completed");
-                        textCompleted.setText(String.valueOf(completedList.size()));
-                    } else {
-                        // Handle the error
-                        System.out.println("Error getting documents: " + task.getException());
-                    }
-                });
+//        firestore.collection("users")
+//                .document(username)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        // Get the count of documents in the collection
+//                        List<String> completedList = (List<String>) task.getResult().get("completed");
+//                        textCompleted.setText(String.valueOf(completedList.size()));
+//                    } else {
+//                        // Handle the error
+//                        System.out.println("Error getting documents: " + task.getException());
+//                    }
+//                });
 
         Button logoutButton = (Button) view.findViewById(R.id.logoutProfileButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {

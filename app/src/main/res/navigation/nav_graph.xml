@@ -7,18 +7,18 @@
 
     <fragment
         android:id="@+id/nav_all_anime"
-        android:name="com.ms24053396.emanime.AllAnimeFragment"
+        android:name="com.ms24053396.harufin.HomeFragment"
         android:label="All Anime" />
     <fragment
         android:id="@+id/nav_my_anime"
-        android:name="com.ms24053396.emanime.MyAnimeFragment"
+        android:name="com.ms24053396.harufin.MyAnimeFragment"
         android:label="My Anime" />
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.ms24053396.emanime.ProfileFragment"
+        android:name="com.ms24053396.harufin.ProfileFragment"
         android:label="Profile" />
     <fragment
         android:id="@+id/nav_admin"
-        android:name="com.ms24053396.emanime.AdminFragment"
+        android:name="com.ms24053396.harufin.AdminFragment"
         android:label="Admin" />
 </navigation>

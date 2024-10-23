@@ -39,10 +39,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="181dp"
                     android:layout_height="wrap_content"
-                    android:hint="Anime ID">
+                    android:hint="Account ID">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextAnimeID"
+                        android:id="@+id/editTextAccountID"
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -54,10 +54,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
 
-                    android:hint="Episode Count">
+                    android:hint="Balance">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextEpisodeCount"
+                        android:id="@+id/editTextBalance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number" />
@@ -66,80 +66,20 @@
             </LinearLayout>
             <!-- TextInput for animeID -->
 
-            <!-- TextInput for anime name -->
+            <!-- TextInput for transactionAccount name -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Anime Name">
+                android:hint="User Name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextName"
+                    android:id="@+id/editUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <LinearLayout
-                android:id="@+id/linearLayout5"
-                android:layout_width="wrap_content"
-                android:layout_height="174dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/editTextDescriptionAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="119dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Description"
-                    android:inputType="textMultiLine"
-                    android:text="" />
-
-                <LinearLayout
-                    android:id="@+id/linearLayout4"
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/imageViewAdmin"
-                        android:layout_width="177dp"
-                        android:layout_height="111dp"
-
-                        android:background="#A6A5A5"
-                        android:scaleType="centerCrop" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="80dp">
-
-
-                    <Button
-                        android:id="@+id/buttonSelectImage"
-                        style="@style/Widget.Material3.Button.IconButton.Outlined"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        app:icon="@drawable/ic_image_24px" />
-
-                    <Button
-                        android:id="@+id/buttonCamera"
-                        style="@style/Widget.Material3.Button.IconButton.Outlined"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        app:icon="@drawable/ic_camera_24px" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/adminSubmitButton"
