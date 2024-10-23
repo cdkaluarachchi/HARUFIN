@@ -5,11 +5,14 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.google.common.reflect.Reflection.getPackageName;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -109,6 +112,7 @@ public class ProfileFragment extends Fragment {
         MaterialButton buttonDP = view.findViewById(R.id.registerPhotoButton);
         MaterialButton buttonCamera = view.findViewById(R.id.registerCameraButton);
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
+        checkInternetAndShowBanner(view);
         username = sharedPreferences.getString("username", null);
         //System.out.println(username);
         String image = sharedPreferences.getString("userDP", null);
@@ -298,5 +302,21 @@ public class ProfileFragment extends Fragment {
                 Log.e("Camera", "Camera permission denied");
             }
         }
+    }
+
+    private void checkInternetAndShowBanner(View view) {
+        TextView noInternetBanner = view.findViewById(R.id.noInternetBanner);
+
+        if (isInternetAvailable()) {
+            noInternetBanner.setVisibility(View.GONE); // Hide banner if internet is available
+        } else {
+            noInternetBanner.setVisibility(View.VISIBLE); // Show banner if no internet
+        }
+    }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

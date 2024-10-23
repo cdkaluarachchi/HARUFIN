@@ -29,7 +29,9 @@ import android.widget.Toast;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
@@ -98,7 +100,7 @@ public class HomeFragment extends Fragment {
         BalanceTextView = view.findViewById(R.id.textViewBalance);
         loadTransactionsFromFirestore();
         BalanceTextView = (TextView) view.findViewById(R.id.textViewBalance);
-
+        checkInternetAndShowBanner(view);
         loadBalanceFromFirestore();
 
 
@@ -197,6 +199,10 @@ public class HomeFragment extends Fragment {
 
     public void showTransferDialog() {
         // Create a dialog for input
+        if (!isInternetAvailable()) {
+            Toast.makeText(getContext(), "No internet connection. Cannot perform transfer.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Transfer");
 
@@ -221,13 +227,12 @@ public class HomeFragment extends Fragment {
                 }
 
                 Long amount = Long.parseLong(amountString);
-                validateAndTransfer(destUserName, amount);
+                showConfirmationDialog(destUserName, amount);
+
             }
         });
 
         builder.setNegativeButton("Cancel", null);
-
-        // Show the dialog
         builder.create().show();
     }
 
@@ -299,4 +304,45 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Insufficient balance for this transaction.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void checkInternetAndShowBanner(View view) {
+        TextView noInternetBanner = view.findViewById(R.id.noInternetBanner);
+
+        if (isInternetAvailable()) {
+            noInternetBanner.setVisibility(View.GONE); // Hide banner if internet is available
+        } else {
+            noInternetBanner.setVisibility(View.VISIBLE); // Show banner if no internet
+        }
+    }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    private void showConfirmationDialog(String destUserName, Long amount) {
+        // Create a confirmation dialog
+        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(getContext());
+        confirmBuilder.setTitle("Confirm Transfer");
+
+        // Set message to confirm transfer details
+        confirmBuilder.setMessage("Are you sure you want to transfer " + amount + " to " + destUserName + "?");
+
+        // Positive button for confirming the transfer
+        confirmBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Proceed with the transfer if confirmed
+                validateAndTransfer(destUserName, amount);
+            }
+        });
+
+        // Negative button to cancel the confirmation
+        confirmBuilder.setNegativeButton("Cancel", null);
+
+        // Show the confirmation dialog
+        confirmBuilder.show();
+    }
+
 }

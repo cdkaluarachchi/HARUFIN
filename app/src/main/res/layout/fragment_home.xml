@@ -28,11 +28,20 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/noInternetBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF0000"
+        android:text="No Internet Connection"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/TransactionRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="400dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="200dp" />
 

@@ -2,8 +2,11 @@ package com.ms24053396.harufin;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
@@ -82,7 +85,7 @@ public class AdminFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_admin, container, false);
-
+        checkInternetAndShowBanner(view);
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
@@ -158,4 +161,19 @@ public class AdminFragment extends Fragment {
 
     }
 
+    private void checkInternetAndShowBanner(View view) {
+        TextView noInternetBanner = view.findViewById(R.id.noInternetBanner);
+
+        if (isInternetAvailable()) {
+            noInternetBanner.setVisibility(View.GONE); // Hide banner if internet is available
+        } else {
+            noInternetBanner.setVisibility(View.VISIBLE); // Show banner if no internet
+        }
+    }
+
+    private boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
 }
