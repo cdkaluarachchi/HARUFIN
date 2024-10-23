@@ -1,7 +1,7 @@
 package com.ms24053396.harufin;
 
 class Transaction {
-    String dte;
+    Long dte;
     Long accountId;
     String TransactionId;
     String sourceUserName;
@@ -9,7 +9,7 @@ class Transaction {
     Long amount;
     public Transaction(){
     }
-    public Transaction(String dte, Long accountId, String transactionId, String sourceUserName, String destUserName, Long amount) {
+    public Transaction(Long dte, Long accountId, String transactionId, String sourceUserName, String destUserName, Long amount) {
         this.dte = dte;
         this.accountId = accountId;
         this.TransactionId = transactionId;
@@ -18,11 +18,11 @@ class Transaction {
         this.amount = amount;
     }
 
-    public String getDte() {
+    public Long getDte() {
         return dte;
     }
 
-    public void setDte(String dte) {
+    public void setDte(Long dte) {
         this.dte = dte;
     }
 

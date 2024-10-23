@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -157,15 +159,15 @@ public class HomeFragment extends Fragment {
 
                         // Loop through the documents and add them to the list
                         for (DocumentSnapshot document : task.getResult()) {
-                            String date = document.getString("dte");
+                            Long timestamp = document.getLong("dte");
                             Long accountId = document.getLong("accountId");
                             String transactionId = document.getString("TransactionId");
                             String sourceUserName = document.getString("sourceUserName");
                             String destUserName = document.getString("destUserName");
                             Long amount = document.getLong("amount");
-                            transactionsList.add(new Transaction(date, accountId, transactionId, sourceUserName, destUserName, amount));
+                            transactionsList.add(new Transaction(timestamp, accountId, transactionId, sourceUserName, destUserName, amount));
                         }
-
+                        //Collections.reverse(transactionsList);
                         // Pass the transaction list to the adapter to display in RecyclerView
                         firestore.collection("Transactions")
                                 .whereIn("destUserName", Collections.singletonList(username))
@@ -177,15 +179,20 @@ public class HomeFragment extends Fragment {
 
                                         // Loop through the documents and add them to the list
                                         for (DocumentSnapshot document : taskT.getResult()) {
-                                            String date = document.getString("dte");
+                                            Long timestamp = document.getLong("dte");
                                             Long accountId = document.getLong("accountId");
                                             String transactionId = document.getString("TransactionId");
                                             String sourceUserName = document.getString("sourceUserName");
                                             String destUserName = document.getString("destUserName");
                                             Long amount = document.getLong("amount");
-                                            transactionsList.add(new Transaction(date, accountId, transactionId, sourceUserName, destUserName, amount));
+                                            transactionsList.add(new Transaction(timestamp, accountId, transactionId, sourceUserName, destUserName, amount));
                                         }
-                                        Collections.reverse(transactionsList);
+                                        //Collections.reverse(transactionsList);
+                                        Collections.sort(transactionsList, (t1, t2) -> {
+                                            Long timestamp1 = Long.valueOf(t1.getDte());
+                                            Long timestamp2 = Long.valueOf(t2.getDte());
+                                            return timestamp2.compareTo(timestamp1); 
+                                        });
                                         setUpRecyclerView(transactionsList);
                                     } else {
                                         System.out.println("Error getting transactions: " + taskT.getException());
@@ -272,14 +279,15 @@ public class HomeFragment extends Fragment {
     private void executeTransaction(String destUserName, Long amount) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = currentDateTime.format(formatter);
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        long timestamp = currentDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+        //String formattedDateTime = currentDateTime.format(formatter);
         // Calculate the current balance using the previously implemented method
         loadBalanceFromFirestore(); // Ensure the balance is loaded and updated
 
         if (currentBalance[0] >= amount) {
 
-            Transaction transaction = new Transaction(formattedDateTime,null, null, username, destUserName, amount);
+            Transaction transaction = new Transaction(timestamp,null, null, username, destUserName, amount);
 
             firestore.collection("Transactions").add(transaction).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
