@@ -95,8 +95,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        String hexColor = "#f3edf7";
-        view.setBackgroundColor(Color.parseColor(hexColor));
+        //String hexColor = "#f3edf7";
+        //view.setBackgroundColor(Color.parseColor(hexColor));
         transfButton = view.findViewById(R.id.transferButton);
         recyclerView = view.findViewById(R.id.TransactionRecyclerView); // Ensure that the ID matches your layout file
         BalanceTextView = view.findViewById(R.id.textViewBalance);
@@ -133,10 +133,11 @@ public class HomeFragment extends Fragment {
         .get()
         .addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                // Get the count of documents in the collection
+                // Get the count of documents in the collection String.format("%,d", number)
                 //List<String> completedList = (List<String>) task.getResult().get("completed");
                 currentBalance[0] = Double.parseDouble(task.getResult().get("balance").toString());
-                BalanceTextView.setText(String.valueOf(currentBalance[0]));
+                long tmp = (long) currentBalance[0];
+                BalanceTextView.setText(String.format("%,d", tmp));
                 loadTransactionsFromFirestore();
             } else {
                 // Handle the error
@@ -148,7 +149,6 @@ public class HomeFragment extends Fragment {
     private void loadTransactionsFromFirestore() {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-        // Fetch transactions where sourceUserName is the current user
         firestore.collection("Transactions")
                 .whereIn("sourceUserName", Collections.singletonList(username))
                 //.orderBy("dte", Query.Direction.DESCENDING)
@@ -191,7 +191,7 @@ public class HomeFragment extends Fragment {
                                         Collections.sort(transactionsList, (t1, t2) -> {
                                             Long timestamp1 = Long.valueOf(t1.getDte());
                                             Long timestamp2 = Long.valueOf(t2.getDte());
-                                            return timestamp2.compareTo(timestamp1); 
+                                            return timestamp2.compareTo(timestamp1);
                                         });
                                         setUpRecyclerView(transactionsList);
                                     } else {
@@ -218,7 +218,6 @@ public class HomeFragment extends Fragment {
         View dialogView = inflater.inflate(R.layout.dialog_transfer, null);
         builder.setView(dialogView);
 
-        // Get references to the EditText fields for user input
         EditText destUserNameEditText = dialogView.findViewById(R.id.editDestUserName);
         EditText amountEditText = dialogView.findViewById(R.id.editAmount);
 
@@ -258,7 +257,7 @@ public class HomeFragment extends Fragment {
                             //Double currentBalance = taskBalance.getResult().getDouble("balance");
 
                             if (currentBalance[0] >= amount) {
-                                // Proceed with the transaction
+
                                 executeTransaction(destUserName, amount);
                             } else {
                                 Toast.makeText(getContext(), "Insufficient balance!", Toast.LENGTH_SHORT).show();
@@ -279,11 +278,9 @@ public class HomeFragment extends Fragment {
     private void executeTransaction(String destUserName, Long amount) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         long timestamp = currentDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
-        //String formattedDateTime = currentDateTime.format(formatter);
-        // Calculate the current balance using the previously implemented method
-        loadBalanceFromFirestore(); // Ensure the balance is loaded and updated
+
+        loadBalanceFromFirestore();
 
         if (currentBalance[0] >= amount) {
 
@@ -291,19 +288,17 @@ public class HomeFragment extends Fragment {
 
             firestore.collection("Transactions").add(transaction).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    // Deduct the amount from the source user (current user)
+
                     currentBalance[0] -= (double) amount;
                     BalanceTextView.setText(String.valueOf(currentBalance[0]));
+
                     firestore.collection("users").document(username).update("balance", FieldValue.increment(-amount));
 
-                    // Add the amount to the destination user
                     firestore.collection("users").document(destUserName).update("balance", FieldValue.increment(amount));
 
-                    // Notify the user of success
                     Toast.makeText(getContext(), "Transfer successful!", Toast.LENGTH_SHORT).show();
                     loadTransactionsFromFirestore();
                 } else {
-                    // Handle failure in adding the transaction document
                     Toast.makeText(getContext(), "Transfer failed! Could not complete the transaction.", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -334,10 +329,8 @@ public class HomeFragment extends Fragment {
         AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(getContext());
         confirmBuilder.setTitle("Confirm Transfer");
 
-        // Set message to confirm transfer details
         confirmBuilder.setMessage("Are you sure you want to transfer " + amount + " to " + destUserName + "?");
 
-        // Positive button for confirming the transfer
         confirmBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -346,10 +339,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Negative button to cancel the confirmation
         confirmBuilder.setNegativeButton("Cancel", null);
 
-        // Show the confirmation dialog
         confirmBuilder.show();
     }
 

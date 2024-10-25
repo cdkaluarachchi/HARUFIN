@@ -5,6 +5,8 @@ import java.util.List;
 
 public class User {
     private String username;
+    private String FName;
+    private String LName;
     private String password;
     private String email;
     private String address;
@@ -19,6 +21,22 @@ public class User {
 
     public void setTransactionList(List<Transaction> transactionList) {
         this.transactionList = transactionList;
+    }
+
+    public String getFName() {
+        return FName;
+    }
+
+    public void setFName(String FName) {
+        this.FName = FName;
+    }
+
+    public String getLName() {
+        return LName;
+    }
+
+    public void setLName(String LName) {
+        this.LName = LName;
     }
 
     public String getEmail() {

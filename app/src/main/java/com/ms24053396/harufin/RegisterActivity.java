@@ -116,11 +116,10 @@ public class RegisterActivity extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(document -> {
                     if (document.exists()) {
-                        // Username already exists
+
                         Toast.makeText(RegisterActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
                     } else {
-                        // Username doesn't exist, proceed with registration
-                        // ... (your registration logic)
+
                         registerUser(username, hashedPassword);
                     }
                 })
@@ -149,7 +148,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // Store the username and hashed password in Firebase Realtime Database
     private void registerUser(String username, String hashedPassword) {
         User user = new User();
         user.setUsername(username);
@@ -157,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (img != null) {
             user.setDp(img);
         }
-        // Push the data to the database under a unique key
+
         try{
             firestore.collection("users").document(username).set(user)
                     .addOnCompleteListener(task -> {
@@ -240,26 +238,20 @@ public class RegisterActivity extends AppCompatActivity {
     private void convertImageToBase64(Uri imageUri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            //InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-            // Get the original width and height of the bitmap
             int originalWidth = bitmap.getWidth();
             int originalHeight = bitmap.getHeight();
 
-            // Define the target width and height (keeping aspect ratio)
             int targetWidth = 500;
             int targetHeight = (int) ((double) originalHeight / originalWidth * targetWidth);
 
-            // Resize the bitmap while preserving aspect ratio
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
 
-            // Compress the bitmap to a byte array
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
 
-            // Encode the byte array to Base64
             img = Base64.encodeToString(byteArray, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();

@@ -41,7 +41,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/TransactionRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="447dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="200dp" />
 
@@ -49,6 +49,7 @@
         android:id="@+id/transferButton"
         android:layout_marginTop="600dp"
         android:layout_marginLeft="155dp"
+        app:icon="@drawable/payments_24px"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

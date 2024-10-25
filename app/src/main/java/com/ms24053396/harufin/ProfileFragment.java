@@ -105,28 +105,39 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         TextView textViewUsername = (TextView) view.findViewById(R.id.usernameTextView);
+        TextView textViewFName = (TextView) view.findViewById(R.id.editTextFName);
+        TextView textViewLName = (TextView) view.findViewById(R.id.editTextLName);
         TextView textViewEmail = (TextView) view.findViewById(R.id.editTextEmail);
         TextView textAddress = (TextView) view.findViewById(R.id.editTextAddress);
         dp = view.findViewById(R.id.imageViewProfile);
         Button updateButton = view.findViewById(R.id.profileUpdate);
         MaterialButton buttonDP = view.findViewById(R.id.registerPhotoButton);
         MaterialButton buttonCamera = view.findViewById(R.id.registerCameraButton);
+
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
         checkInternetAndShowBanner(view);
         username = sharedPreferences.getString("username", null);
-        //System.out.println(username);
+
         String image = sharedPreferences.getString("userDP", null);
 
         textViewUsername.setText(username);
+
         firestore.collection("users")
                 .document(username)
                 .get()
                 .addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {
+                        String fn = (String) task.getResult().get("FName");
+                        String ln = (String) task.getResult().get("LName");
                         String em = (String) task.getResult().get("email");
                         String addr = (String) task.getResult().get("address");
-
+                        if (fn != null){
+                            textViewFName.setText(fn);
+                        }
+                        if (ln != null){
+                            textViewLName.setText(ln);
+                        }
                         if (em != null){
                             textViewEmail.setText(em);
                         }
@@ -136,18 +147,17 @@ public class ProfileFragment extends Fragment {
 
                         //textAddress.setText(Objects.requireNonNull(task.getResult().get("address")).toString());
                     } else {
-                        // Handle the error
+
                         System.out.println("Error getting documents: " + task.getException());
                     }
                 });
 
         if (image != null ){
+            img = image;
             byte[] decodedBytes = Base64.decode(image, Base64.DEFAULT);
 
-            // Convert the byte array to a Bitmap
             Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
 
-            // Set the Bitmap to the ImageView
             dp.setImageBitmap(bitmap);
         }
 
@@ -183,11 +193,23 @@ public class ProfileFragment extends Fragment {
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (img != null && textViewEmail.getText().toString() != null && textAddress.getText().toString() != null){
-                    firestore.collection("users").document(username).update("email", textViewEmail.getText().toString(), "address", textAddress.getText().toString(), "dp", img);
-                    SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("userDP", img);
+                if (img != null && textViewFName.getText().toString() != null && textViewLName.getText().toString() != null && textViewEmail.getText().toString() != null && textAddress.getText().toString() != null){
+                    firestore.collection("users").document(username).update(
+                            "FName",textViewFName.getText().toString(),
+                            "LName", textViewLName.getText().toString(),
+                            "email", textViewEmail.getText().toString(),
+                            "address", textAddress.getText().toString(),
+                            "dp", img).addOnCompleteListener(TaskT -> {
+                                if (TaskT.isSuccessful()){
+                                    SharedPreferences sharedPreferences = requireContext().getSharedPreferences("HARUFINPrefs", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("userDP", img);
+                                    Toast.makeText(getActivity(), "Profile Info Updated", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(getActivity(), "Profile Info Update Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                 }
             }
         });
@@ -248,7 +270,6 @@ public class ProfileFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
-            // Get the Uri of the temporary file
             Uri imageUri = FileProvider.getUriForFile(requireActivity(),
                     requireActivity().getPackageName() + ".provider",
                     tempFile);
@@ -260,10 +281,9 @@ public class ProfileFragment extends Fragment {
     private void convertImageToBase64(Uri imageUri) {
         try {
             InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
-            //InputStream inputStream = requireActivity().getContentResolver().openInputStream(imageUri);
+
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
-            // Get the original width and height of the bitmap
             int originalWidth = bitmap.getWidth();
             int originalHeight = bitmap.getHeight();
 
@@ -274,12 +294,10 @@ public class ProfileFragment extends Fragment {
             // Resize the bitmap while preserving aspect ratio
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true);
 
-            // Compress the bitmap to a byte array
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
 
-            // Encode the byte array to Base64
             img = Base64.encodeToString(byteArray, Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();

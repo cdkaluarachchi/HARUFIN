@@ -20,9 +20,14 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AdminFragment#newInstance} factory method to
@@ -119,16 +124,16 @@ public class AdminFragment extends Fragment {
                 String sourceUN = editTextSourceUserName.getText().toString().trim();
                 String destUN = editTextDestUserName.getText().toString().trim();
                 String balance = editTextBalance.getText().toString().trim();
-                //String description = String.valueOf(editTextDescription.getText());
 
-                // Basic input validation
                 if (sourceUN.isEmpty() || destUN.isEmpty() || balance.isEmpty()) {
                     Toast.makeText(getActivity(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     // Convert episodeCount to Integer
                     Long bal = Long.parseLong(balance);
-
+                    LocalDateTime currentDateTime = LocalDateTime.now();
+                    long timestamp = currentDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
                     Transaction transaction = new Transaction();
+                    transaction.setDte(timestamp);
                     transaction.setSourceUserName(sourceUN);
                     transaction.setDestUserName(destUN);
                     transaction.setAmount(bal);
@@ -137,6 +142,7 @@ public class AdminFragment extends Fragment {
                         firestore.collection("Transactions").document().set(transaction)
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
+                                        firestore.collection("users").document(destUN).update("balance", FieldValue.increment(bal));
                                         Toast.makeText(getActivity(), "TransactionAccount entry added successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(getActivity(), "Process failed", Toast.LENGTH_SHORT).show();

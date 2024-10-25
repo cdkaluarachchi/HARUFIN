@@ -79,9 +79,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                         if (userType.equals("standard")){
                                             Intent intent = new Intent(LoginActivity.this, MainActivityStandard.class);
+                                            LoginActivity.this.finishAffinity();
                                             startActivity(intent);
                                         } else if(userType.equals("admin")){
                                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            LoginActivity.this.finishAffinity();
                                             startActivity(intent);
                                         }
 

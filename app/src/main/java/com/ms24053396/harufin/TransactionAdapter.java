@@ -50,13 +50,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
 
         if (transaction.getDestUserName().equals(username)) {
-            holder.amountTextView.setText(String.valueOf("+" + transaction.getAmount()));
+            holder.amountTextView.setText(String.valueOf("+" + String.format("%,d", transaction.getAmount()) ));
             holder.amountTextView.setTextColor(Color.GREEN); // Green for destination
         } else if (transaction.getSourceUserName().equals(username)) {
-            holder.amountTextView.setText(String.valueOf("-" + transaction.getAmount()));
+            holder.amountTextView.setText(String.valueOf("-" + String.format("%,d", transaction.getAmount()) ));
             holder.amountTextView.setTextColor(Color.RED); // Red for source
         } else {
-            holder.amountTextView.setText(String.valueOf(transaction.getAmount()));
+            holder.amountTextView.setText(String.format("%,d", transaction.getAmount()));
             holder.amountTextView.setTextColor(Color.BLACK); // Default color
         }
     }

@@ -50,8 +50,8 @@
 
         <LinearLayout
             android:id="@+id/frameLayout"
-            android:layout_width="356dp"
-            android:layout_height="179dp"
+            android:layout_width="355dp"
+            android:layout_height="301dp"
             android:layout_marginTop="40dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/profileUpdate"
@@ -60,6 +60,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logoutProfileButton"
             app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:hint="Last Name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextLName"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:ems="14"
+                    android:inputType="text"
+                    android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:hint="First Name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextFName"
+                    android:layout_width="350dp"
+                    android:layout_height="wrap_content"
+                    android:ems="14"
+                    android:inputType="text"
+                    android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="350dp"
@@ -126,11 +154,11 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="240dp"
+            android:layout_marginBottom="116dp"
             android:text="Update"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.088"
+            app:layout_constraintHorizontal_bias="0.104"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView

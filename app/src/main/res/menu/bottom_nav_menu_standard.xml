@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_all_anime"
-        android:icon="@drawable/ic_anime_my"
+        android:icon="@drawable/account_balance_24px"
         android:title="Home" />
     <item
         android:id="@+id/nav_profile"
