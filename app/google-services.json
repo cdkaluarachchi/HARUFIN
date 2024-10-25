@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "378460397505",
+    "project_id": "harufin-abc88",
+    "storage_bucket": "harufin-abc88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378460397505:android:652686bc7a34bce9e55940",
+        "android_client_info": {
+          "package_name": "com.ms24053396.harufin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBI32OLsivan88pV6Ux3LyIXuZM6gcVlo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
